@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:someonetoview/routes.dart';
+import 'package:someonetoview/constants.dart';
 
 const selectedStyle = TextStyle(
   fontWeight: FontWeight.bold,
   decoration: TextDecoration.underline,
 );
 
-class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
+class MainAppBar extends StatelessWidget {
   final String route;
 
   const MainAppBar({super.key, required this.route});
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-
-  @override
   Widget build(BuildContext context) {
-    return AppBar(
+    return SliverAppBar(
       automaticallyImplyLeading: false,
       title: const Text('someonetoview'),
-      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      pinned: true,
+      scrolledUnderElevation: 0,
+      backgroundColor: Theme.of(context).colorScheme.background,
       actions: [
         TextButton(
           child: Text(

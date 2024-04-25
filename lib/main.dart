@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:someonetoview/about_page.dart';
+import 'package:someonetoview/pages/about_page.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
-import 'package:someonetoview/contact_page.dart';
-import 'package:someonetoview/furniture_page.dart';
-import 'package:someonetoview/post_listing_page.dart';
-import 'package:someonetoview/property_page.dart';
-import 'package:someonetoview/routes.dart';
-import 'package:someonetoview/vehicles_page.dart';
+import 'package:someonetoview/pages/contact_page.dart';
+import 'package:someonetoview/pages/furniture_page.dart';
+import 'package:someonetoview/pages/post_listing_page.dart';
+import 'package:someonetoview/pages/property_page.dart';
+import 'package:someonetoview/constants.dart';
+import 'package:someonetoview/pages/vehicles_page.dart';
 
 void main() {
   usePathUrlStrategy();
@@ -47,7 +47,7 @@ class App extends StatelessWidget {
               : {},
         ),
       ),
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       initialRoute: propertyRoute,
       routes: {
         vehiclesRoute: (context) => const VehiclesPage(),
