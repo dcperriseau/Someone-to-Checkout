@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:someonetoview/main_app_bar.dart';
 
 class AboutPage extends StatelessWidget {
@@ -25,7 +23,7 @@ class AboutPage extends StatelessWidget {
                       child: Row(
                         children: [
                           Flexible(
-                            flex: 4,
+                            flex: 5,
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               crossAxisAlignment: CrossAxisAlignment.start,
