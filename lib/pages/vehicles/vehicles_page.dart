@@ -1,21 +1,20 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:someonetoview/listing_widgets/furniture_listing_widget.dart';
+import 'package:someonetoview/pages/vehicles/vehicle_listing_widget.dart';
 import 'package:someonetoview/main_app_bar.dart';
-import 'package:someonetoview/models/furniture_listing.dart';
+import 'package:someonetoview/models/vehicle_listing.dart';
 import 'package:someonetoview/models/location.dart';
-import 'package:uuid/uuid.dart';
 
-class FurniturePage extends StatefulWidget {
-  const FurniturePage({super.key});
+class VehiclesPage extends StatefulWidget {
+  const VehiclesPage({super.key});
 
   @override
-  State<FurniturePage> createState() => _FurniturePageState();
+  State<VehiclesPage> createState() => _VehiclesPageState();
 }
 
-class _FurniturePageState extends State<FurniturePage> {
-  Future<List<FurnitureListing>> generateSampleData() async {
+class _VehiclesPageState extends State<VehiclesPage> {
+  Future<List<VehicleListing>> generateSampleData() async {
     // Sample data for location
     Location location = Location(
       longitude: -122.4194,
@@ -35,18 +34,17 @@ class _FurniturePageState extends State<FurniturePage> {
     ];
 
     // Generate random sample data for VehicleListing
-    List<FurnitureListing> listings = [];
+    List<VehicleListing> listings = [];
 
     for (int i = 0; i < 100; i++) {
       int imageIndex = i + Random().nextInt(500);
-      FurnitureListing listing = FurnitureListing(
-        id: const Uuid().v4(),
+      VehicleListing listing = VehicleListing(
         mainImageUrl: 'https://picsum.photos/id/$imageIndex/300',
-        title: 'Furniture $i',
-        price: Random().nextInt(500) + 10,
+        title: 'Vehicle $i',
+        price: Random().nextInt(50000) + 10000,
         location: location,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        condition: 'Used',
+        mileage: Random().nextInt(300000) + 10000,
         imageUrls: imageUrls,
       );
 
@@ -76,15 +74,13 @@ class _FurniturePageState extends State<FurniturePage> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     } else {
-                      final listings = snapshot.data as List<FurnitureListing>;
+                      final listings = snapshot.data as List<VehicleListing>;
                       return Center(
                         child: GridView.extent(
-                          maxCrossAxisExtent: width / 4,
-                          crossAxisSpacing: 8,
-                          mainAxisSpacing: 16,
+                          maxCrossAxisExtent: width / 5,
                           children: [
                             for (final listing in listings)
-                              FurnitureListingWidget(furnitureListing: listing)
+                              VehicleListingWidget(vehicleListing: listing)
                           ],
                         ),
                       );

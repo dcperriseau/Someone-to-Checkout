@@ -3,12 +3,12 @@ import 'package:someonetoview/models/furniture_listing.dart';
 import 'package:someonetoview/pages/about_page.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:someonetoview/pages/contact_page.dart';
-import 'package:someonetoview/pages/furniture_details_page.dart';
-import 'package:someonetoview/pages/furniture_page.dart';
+import 'package:someonetoview/pages/furniture/furniture_details_page.dart';
+import 'package:someonetoview/pages/furniture/furniture_page.dart';
 import 'package:someonetoview/pages/post_listing_page.dart';
 import 'package:someonetoview/pages/property_page.dart';
 import 'package:someonetoview/constants.dart';
-import 'package:someonetoview/pages/vehicles_page.dart';
+import 'package:someonetoview/pages/vehicles/vehicles_page.dart';
 import 'package:someonetoview/theme.dart';
 
 void main() {
