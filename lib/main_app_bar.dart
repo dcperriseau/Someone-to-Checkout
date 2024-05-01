@@ -15,6 +15,14 @@ class MainAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       automaticallyImplyLeading: false,
+      titleTextStyle: Theme.of(context)
+          .appBarTheme
+          .titleTextStyle
+          ?.copyWith(fontFamily: robotoFont),
+      toolbarTextStyle: Theme.of(context)
+          .appBarTheme
+          .toolbarTextStyle
+          ?.copyWith(fontFamily: robotoFont),
       title: const Text('someonetoview'),
       pinned: true,
       scrolledUnderElevation: 0,

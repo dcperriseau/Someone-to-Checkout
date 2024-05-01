@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:someonetoview/models/furniture_listing.dart';
 import 'package:someonetoview/pages/about_page.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:someonetoview/pages/contact_page.dart';
+import 'package:someonetoview/pages/furniture_details_page.dart';
 import 'package:someonetoview/pages/furniture_page.dart';
 import 'package:someonetoview/pages/post_listing_page.dart';
 import 'package:someonetoview/pages/property_page.dart';
@@ -42,12 +44,31 @@ class App extends StatelessWidget {
       routes: {
         vehiclesRoute: (context) => const VehiclesPage(),
         furnitureRoute: (context) => const FurniturePage(),
+        // furnitureDetailRoute: (context) => const FurnitureDetailsPage(),
         aboutRoute: (context) => const AboutPage(),
         postListingRoute: (context) => const PostListingPage(),
         contactRoute: (context) => const ContactPage(),
       },
+      onGenerateRoute: (settings) {
+        if (settings.name!.contains(furnitureDetailRoute)) {
+          final args = settings.arguments as FurnitureListing;
+          return MaterialPageRoute(
+            builder: (context) => FurnitureDetailsPage(furnitureListing: args),
+          );
+        }
+
+        switch (settings.name) {
+          case propertyRoute:
+            return MaterialPageRoute(
+              builder: (context) => const PropertyPage(),
+            );
+          default:
+            return MaterialPageRoute(
+              builder: (context) => const PropertyPage(),
+            );
+        }
+      },
       title: 'someonetoview',
-      home: const PropertyPage(),
     );
   }
 }

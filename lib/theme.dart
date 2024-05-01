@@ -5,7 +5,7 @@ import 'package:someonetoview/main.dart';
 
 final customTheme = ThemeData(
   colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-  fontFamily: robotoFont,
+  fontFamily: openSansFont,
   pageTransitionsTheme: PageTransitionsTheme(
     builders: kIsWeb
         ? {
