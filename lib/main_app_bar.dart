@@ -4,6 +4,14 @@ import 'package:someonetoview/constants.dart';
 const selectedStyle = TextStyle(
   fontWeight: FontWeight.bold,
   decoration: TextDecoration.underline,
+  fontSize: 16,
+  fontFamily: robotoFont,
+);
+
+const defaultStyle = TextStyle(
+  fontWeight: FontWeight.bold,
+  fontSize: 16,
+  fontFamily: robotoFont,
 );
 
 class MainAppBar extends StatelessWidget {
@@ -15,23 +23,16 @@ class MainAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       automaticallyImplyLeading: false,
-      titleTextStyle: Theme.of(context)
-          .appBarTheme
-          .titleTextStyle
-          ?.copyWith(fontFamily: robotoFont),
-      toolbarTextStyle: Theme.of(context)
-          .appBarTheme
-          .toolbarTextStyle
-          ?.copyWith(fontFamily: robotoFont),
-      title: const Text('someonetoview'),
+      title: const Text('Someone To View'),
       pinned: true,
       scrolledUnderElevation: 0,
+      elevation: 0,
       backgroundColor: Theme.of(context).colorScheme.background,
       actions: [
         TextButton(
           child: Text(
             'Property',
-            style: route == propertyRoute ? selectedStyle : null,
+            style: route == propertyRoute ? selectedStyle : defaultStyle,
           ),
           onPressed: () {
             Navigator.pushNamed(context, propertyRoute);
@@ -40,7 +41,7 @@ class MainAppBar extends StatelessWidget {
         TextButton(
           child: Text(
             'Vehicles',
-            style: route == vehiclesRoute ? selectedStyle : null,
+            style: route == vehiclesRoute ? selectedStyle : defaultStyle,
           ),
           onPressed: () {
             Navigator.pushNamed(context, vehiclesRoute);
@@ -49,7 +50,7 @@ class MainAppBar extends StatelessWidget {
         TextButton(
           child: Text(
             'Furniture',
-            style: route == furnitureRoute ? selectedStyle : null,
+            style: route == furnitureRoute ? selectedStyle : defaultStyle,
           ),
           onPressed: () {
             Navigator.pushNamed(context, furnitureRoute);
@@ -58,7 +59,7 @@ class MainAppBar extends StatelessWidget {
         TextButton(
           child: Text(
             'About',
-            style: route == aboutRoute ? selectedStyle : null,
+            style: route == aboutRoute ? selectedStyle : defaultStyle,
           ),
           onPressed: () {
             Navigator.pushNamed(context, aboutRoute);
@@ -67,7 +68,7 @@ class MainAppBar extends StatelessWidget {
         TextButton(
           child: Text(
             'Post Listing',
-            style: route == postListingRoute ? selectedStyle : null,
+            style: route == postListingRoute ? selectedStyle : defaultStyle,
           ),
           onPressed: () {
             Navigator.pushNamed(context, postListingRoute);
@@ -76,7 +77,7 @@ class MainAppBar extends StatelessWidget {
         TextButton(
           child: Text(
             'Contact',
-            style: route == contactRoute ? selectedStyle : null,
+            style: route == contactRoute ? selectedStyle : defaultStyle,
           ),
           onPressed: () {
             Navigator.pushNamed(context, contactRoute);

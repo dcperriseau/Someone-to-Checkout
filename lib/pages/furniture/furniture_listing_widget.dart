@@ -48,10 +48,23 @@ class FurnitureListingWidget extends StatelessWidget {
                 ),
               ),
             ),
-            Text(furnitureListing.title),
-            Text('\$${furnitureListing.price}'),
-            Text('Condition: ${furnitureListing.condition}'),
-            Text(furnitureListing.location.city),
+            SizedBox(height: 12.0),
+            Text(
+              '\$${furnitureListing.price}',
+              style:
+                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+            ),
+            Text(
+              furnitureListing.title,
+            ),
+            Text(
+              'Condition: ${furnitureListing.condition}',
+              style: TextStyle(color: Colors.grey[600]),
+            ),
+            Text(
+              furnitureListing.location.city,
+              style: TextStyle(color: Colors.grey[600]),
+            ),
           ],
         ),
       ),
