@@ -15,7 +15,7 @@ class FurnitureListing {
   final String description;
   final String condition;
   final List<String> imageUrls;
-  final AvailableTimes availableTimes;
+  final AvailableTimes? availableTimes;
 
   FurnitureListing({
     required this.id,
@@ -29,7 +29,7 @@ class FurnitureListing {
     required this.description,
     required this.condition,
     required this.imageUrls,
-    required this.availableTimes,
+    this.availableTimes,
   });
 
   FurnitureListing copyWith({
@@ -94,6 +94,6 @@ class FurnitureListing {
         'description': description,
         'condition': condition,
         'image_urls': List<String>.from(imageUrls.map((x) => x)),
-        'available_times': availableTimes.toMap(),
+        'available_times': availableTimes?.toMap(),
       };
 }

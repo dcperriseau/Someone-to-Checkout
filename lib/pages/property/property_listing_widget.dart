@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:someonetoview/constants.dart';
 import 'package:someonetoview/models/property_listing.dart';
 import 'package:someonetoview/pages/vehicles/vehicle_listing_widget.dart';
 
@@ -12,10 +13,10 @@ class PropertyListingWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // final newRoute = '$PropertyDetailRoute?id=${PropertyListing.id}';
-        // Navigator.of(context).pushNamed(
-        //   PropertyDetailRoute,
-        //   arguments: PropertyListing,
-        // );
+        Navigator.of(context).pushNamed(
+          propertyDetailRoute,
+          arguments: propertyListing,
+        );
       },
       child: SizedBox(
         width: double.infinity,

@@ -1,28 +1,28 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:someonetoview/main_app_bar.dart';
-import 'package:someonetoview/models/furniture_listing.dart';
+import 'package:someonetoview/models/vehicle_listing.dart';
 import 'package:someonetoview/pages/vehicles/vehicle_listing_widget.dart';
 
-class FurnitureDetailsPage extends StatefulWidget {
-  final FurnitureListing furnitureListing;
+class VehicleDetailsPage extends ConsumerStatefulWidget {
+  final VehicleListing vehicleListing;
 
-  const FurnitureDetailsPage({super.key, required this.furnitureListing});
+  const VehicleDetailsPage({super.key, required this.vehicleListing});
 
   @override
-  State<FurnitureDetailsPage> createState() => _FurnitureDetailsPageState();
+  ConsumerState createState() => _FurnitureDetailsPageState();
 }
 
-class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
+class _FurnitureDetailsPageState extends ConsumerState<VehicleDetailsPage> {
   int selectedImage = 0;
 
   LatLng getCoords() {
     return LatLng(
-      widget.furnitureListing.location.latitude,
-      widget.furnitureListing.location.longitude,
+      widget.vehicleListing.location.latitude,
+      widget.vehicleListing.location.longitude,
     );
   }
 
@@ -68,10 +68,10 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
   Widget imageSection() {
     List<Widget> images = [];
 
-    int imageUrlLen = widget.furnitureListing.imageUrls.length;
+    int imageUrlLen = widget.vehicleListing.imageUrls.length;
 
     for (int i = 0; i < imageUrlLen; i++) {
-      String url = widget.furnitureListing.imageUrls[i];
+      String url = widget.vehicleListing.imageUrls[i];
 
       images.add(
         GestureDetector(
@@ -86,7 +86,7 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
 
       if (imageUrlLen - 1 == i) continue;
 
-      images.add(SizedBox(
+      images.add(const SizedBox(
         height: 8,
       ));
     }
@@ -99,12 +99,12 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
           width: (MediaQuery.of(context).size.width / 2) - 150,
           child: Image.network(
             selectedImage == 0
-                ? widget.furnitureListing.mainImageUrl
-                : widget.furnitureListing.imageUrls[selectedImage],
+                ? widget.vehicleListing.mainImageUrl
+                : widget.vehicleListing.imageUrls[selectedImage],
             fit: BoxFit.fitWidth,
           ),
         ),
-        SizedBox(width: 12),
+        const SizedBox(width: 12),
         SizedBox(
           width: 100,
           height: 600,
@@ -129,24 +129,24 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Price: \$${priceFormat(widget.furnitureListing.price)}',
+              'Price: \$${priceFormat(widget.vehicleListing.price)}',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             Text(
-              'Condition: ${widget.furnitureListing.condition}',
+              '${formatNumber(widget.vehicleListing.mileage)} Miles',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             Text(
-              'Listed by: ${widget.furnitureListing.username}',
+              'Listed by: ${widget.vehicleListing.username}',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
             Text(
-              'Listed On: ${DateFormat.yMMMd('en_US').format(widget.furnitureListing.dateCreated)}',
+              'Listed On: ${DateFormat.yMMMd('en_US').format(widget.vehicleListing.dateCreated)}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             Text(
-              'Last Updated: ${DateFormat.yMMMd('en_US').format(widget.furnitureListing.lastUpdated)}',
+              'Last Updated: ${DateFormat.yMMMd('en_US').format(widget.vehicleListing.lastUpdated)}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const Divider(),
@@ -156,14 +156,14 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
               style: FilledButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.black87,
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(0),
                   ),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
                 child: Text(
                   'Send Someone To View This',
                   style: TextStyle(
@@ -172,20 +172,20 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             FilledButton(
               onPressed: () {},
               style: FilledButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.black87,
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(0),
                   ),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
                 child: Text(
                   'Have Someone Keep You Company',
                   style: TextStyle(
@@ -201,7 +201,7 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
   }
 
   Widget timesToViewWidget() {
-    final times = widget.furnitureListing.availableTimes!;
+    final times = widget.vehicleListing.availableTimes!;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -258,12 +258,12 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.furnitureListing.title,
+                        widget.vehicleListing.title,
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -272,9 +272,9 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 imageSection(),
-                                SizedBox(height: 12),
+                                const SizedBox(height: 12),
                                 Text(
-                                  widget.furnitureListing.description,
+                                  widget.vehicleListing.description,
                                   style:
                                       Theme.of(context).textTheme.titleMedium,
                                 ),

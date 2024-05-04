@@ -8,7 +8,7 @@ import 'package:someonetoview/models/vehicle_listing.dart';
 import 'package:uuid/uuid.dart';
 
 class Generator {
-  static Future<List<PropertyListing>> generatePropertyListings() async {
+  static List<PropertyListing> generatePropertyListings() {
     // Sample data for location
     Location location = Location(
       longitude: -118.264854,
@@ -36,14 +36,20 @@ class Generator {
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
     String finalDesc = '';
 
+    TimeSlot timeSlot1 = TimeSlot(start: '8:00 AM', end: '12:00 PM');
+    TimeSlot timeSlot2 = TimeSlot(start: '3:00 PM', end: '5:00 PM');
+
     for (int i = 0; i < 4; i++) {
       finalDesc += ' $description';
     }
 
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 12; i++) {
       int imageIndex = Random().nextInt(15);
       PropertyListing listing = PropertyListing(
         id: const Uuid().v4(),
+        username: 'Fake User',
+        dateCreated: DateTime.now().subtract(const Duration(days: 4)),
+        lastUpdated: DateTime.now().subtract(const Duration(hours: 36)),
         mainImageUrl: 'https://picsum.photos/id/$imageIndex/300',
         title: 'Property Listing Here ${i + 1}',
         price: Random().nextInt(4000) + 500,
@@ -52,6 +58,15 @@ class Generator {
         bedroomCount: Random().nextInt(2) + 1,
         bathroomCount: Random().nextInt(1) + 1,
         imageUrls: ['https://picsum.photos/id/$imageIndex/300', ...imageUrls],
+        availableTimes: AvailableTimes(
+          sunday: [timeSlot1, timeSlot2],
+          monday: 'none',
+          tuesday: [timeSlot1],
+          wednesday: [timeSlot2],
+          thursday: 'none',
+          friday: [timeSlot1, timeSlot2],
+          saturday: 'none',
+        ),
       );
 
       listings.add(listing);
@@ -60,7 +75,7 @@ class Generator {
     return listings;
   }
 
-  static Future<List<FurnitureListing>> generateFurnitureListings() async {
+  static List<FurnitureListing> generateFurnitureListings() {
     // Sample data for location
     Location location = Location(
       longitude: -118.264854,
@@ -97,15 +112,15 @@ class Generator {
     TimeSlot timeSlot1 = TimeSlot(start: '9:00 AM', end: '12:00 PM');
     TimeSlot timeSlot2 = TimeSlot(start: '1:00 PM', end: '5:00 PM');
 
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 12; i++) {
       int imageIndex = Random().nextInt(15);
       FurnitureListing listing = FurnitureListing(
         id: const Uuid().v4(),
-        username: 'Julian C.',
+        username: 'Fake User',
         dateCreated: DateTime.now().subtract(const Duration(days: 4)),
         lastUpdated: DateTime.now().subtract(const Duration(hours: 36)),
         mainImageUrl: 'https://picsum.photos/id/$imageIndex/300',
-        title: 'Furniture Listing Here ${i + 1}',
+        title: 'Furniture Listing ${i + 1}',
         price: Random().nextInt(500) + 10,
         location: location,
         description: finalDesc,
@@ -128,7 +143,7 @@ class Generator {
     return listings;
   }
 
-  static Future<List<VehicleListing>> generateVehicleListings() async {
+  static List<VehicleListing> generateVehicleListings() {
     // Sample data for location
     Location location = Location(
       longitude: -118.264854,
@@ -160,17 +175,32 @@ class Generator {
       finalDesc += ' $description';
     }
 
-    for (int i = 0; i < 100; i++) {
+    TimeSlot timeSlot1 = TimeSlot(start: '6:00 AM', end: '11:00 AM');
+    TimeSlot timeSlot2 = TimeSlot(start: '1:00 PM', end: '5:30 PM');
+
+    for (int i = 0; i < 12; i++) {
       int imageIndex = Random().nextInt(15);
       VehicleListing listing = VehicleListing(
         id: const Uuid().v4(),
+        username: 'Fake User',
+        dateCreated: DateTime.now().subtract(const Duration(days: 4)),
+        lastUpdated: DateTime.now().subtract(const Duration(hours: 36)),
         mainImageUrl: 'https://picsum.photos/id/$imageIndex/300',
-        title: 'Vehicle Listing Here ${i + 1}',
+        title: 'Vehicle Listing ${i + 1}',
         price: Random().nextInt(30000) + 1000,
         location: location,
         description: finalDesc,
         mileage: Random().nextInt(200000) + 100000,
         imageUrls: ['https://picsum.photos/id/$imageIndex/300', ...imageUrls],
+        availableTimes: AvailableTimes(
+          sunday: [timeSlot1, timeSlot2],
+          monday: 'none',
+          tuesday: [timeSlot1],
+          wednesday: [timeSlot2],
+          thursday: 'none',
+          friday: [timeSlot1, timeSlot2],
+          saturday: 'none',
+        ),
       );
 
       listings.add(listing);

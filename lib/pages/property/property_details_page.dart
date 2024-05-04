@@ -1,28 +1,29 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:someonetoview/main_app_bar.dart';
-import 'package:someonetoview/models/furniture_listing.dart';
+import 'package:someonetoview/models/property_listing.dart';
 import 'package:someonetoview/pages/vehicles/vehicle_listing_widget.dart';
 
-class FurnitureDetailsPage extends StatefulWidget {
-  final FurnitureListing furnitureListing;
+class PropertyDetailsPage extends ConsumerStatefulWidget {
+  final PropertyListing propertyListing;
 
-  const FurnitureDetailsPage({super.key, required this.furnitureListing});
+  const PropertyDetailsPage({super.key, required this.propertyListing});
 
   @override
-  State<FurnitureDetailsPage> createState() => _FurnitureDetailsPageState();
+  ConsumerState createState() => _FurnitureDetailsPageState();
 }
 
-class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
+class _FurnitureDetailsPageState extends ConsumerState<PropertyDetailsPage> {
   int selectedImage = 0;
 
   LatLng getCoords() {
     return LatLng(
-      widget.furnitureListing.location.latitude,
-      widget.furnitureListing.location.longitude,
+      widget.propertyListing.location.latitude,
+      widget.propertyListing.location.longitude,
     );
   }
 
@@ -68,10 +69,10 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
   Widget imageSection() {
     List<Widget> images = [];
 
-    int imageUrlLen = widget.furnitureListing.imageUrls.length;
+    int imageUrlLen = widget.propertyListing.imageUrls.length;
 
     for (int i = 0; i < imageUrlLen; i++) {
-      String url = widget.furnitureListing.imageUrls[i];
+      String url = widget.propertyListing.imageUrls[i];
 
       images.add(
         GestureDetector(
@@ -99,8 +100,8 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
           width: (MediaQuery.of(context).size.width / 2) - 150,
           child: Image.network(
             selectedImage == 0
-                ? widget.furnitureListing.mainImageUrl
-                : widget.furnitureListing.imageUrls[selectedImage],
+                ? widget.propertyListing.mainImageUrl
+                : widget.propertyListing.imageUrls[selectedImage],
             fit: BoxFit.fitWidth,
           ),
         ),
@@ -129,24 +130,28 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Price: \$${priceFormat(widget.furnitureListing.price)}',
+              'Price: \$${priceFormat(widget.propertyListing.price)}',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             Text(
-              'Condition: ${widget.furnitureListing.condition}',
+              'Bedrooms: ${widget.propertyListing.bedroomCount}',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             Text(
-              'Listed by: ${widget.furnitureListing.username}',
+              'Bathrooms: ${widget.propertyListing.bathroomCount}',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            Text(
+              'Listed by: ${widget.propertyListing.username}',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
             Text(
-              'Listed On: ${DateFormat.yMMMd('en_US').format(widget.furnitureListing.dateCreated)}',
+              'Listed On: ${DateFormat.yMMMd('en_US').format(widget.propertyListing.dateCreated)}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             Text(
-              'Last Updated: ${DateFormat.yMMMd('en_US').format(widget.furnitureListing.lastUpdated)}',
+              'Last Updated: ${DateFormat.yMMMd('en_US').format(widget.propertyListing.lastUpdated)}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const Divider(),
@@ -201,7 +206,7 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
   }
 
   Widget timesToViewWidget() {
-    final times = widget.furnitureListing.availableTimes!;
+    final times = widget.propertyListing.availableTimes!;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -258,7 +263,7 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.furnitureListing.title,
+                        widget.propertyListing.title,
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
@@ -274,7 +279,7 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
                                 imageSection(),
                                 SizedBox(height: 12),
                                 Text(
-                                  widget.furnitureListing.description,
+                                  widget.propertyListing.description,
                                   style:
                                       Theme.of(context).textTheme.titleMedium,
                                 ),

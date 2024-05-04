@@ -1,6 +1,8 @@
 // Routes
 const String propertyRoute = '/property';
+const String propertyDetailRoute = '/property/detail';
 const String vehiclesRoute = '/vehicles';
+const String vehicleDetailRoute = '/vehicle/detail';
 const String furnitureRoute = '/furniture';
 const String furnitureDetailRoute = '/furniture/detail';
 const String aboutRoute = '/about';

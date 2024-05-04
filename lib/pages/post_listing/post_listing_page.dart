@@ -1,26 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:someonetoview/constants.dart';
 import 'package:someonetoview/main_app_bar.dart';
 import 'package:someonetoview/models/available_times.dart';
+import 'package:someonetoview/models/furniture_listing.dart';
 import 'package:someonetoview/models/location.dart';
 import 'package:someonetoview/models/property_listing.dart';
+import 'package:someonetoview/models/vehicle_listing.dart';
 import 'package:someonetoview/pages/post_listing/time_slot_section_widget.dart';
+import 'package:someonetoview/providers/furniture_provider.dart';
+import 'package:someonetoview/providers/property_provider.dart';
+import 'package:someonetoview/providers/vehicles_provider.dart';
 import 'package:uuid/uuid.dart';
 
-class PostListingPage extends StatefulWidget {
+class PostListingPage extends ConsumerStatefulWidget {
   const PostListingPage({super.key});
 
   @override
-  State<PostListingPage> createState() => _PostListingPageState();
+  ConsumerState createState() => _PostListingPageState();
 }
 
-class _PostListingPageState extends State<PostListingPage>
-    with SingleTickerProviderStateMixin {
+class _PostListingPageState extends ConsumerState<PostListingPage> {
   final _propertyFormKey = GlobalKey<FormState>();
   final _vehicleFormKey = GlobalKey<FormState>();
   final _furnitureFormKey = GlobalKey<FormState>();
 
   final titleController = TextEditingController();
+  final mileageController = TextEditingController();
+  final conditionController = TextEditingController();
   final bedroomController = TextEditingController();
   final bathroomController = TextEditingController();
   final priceController = TextEditingController();
@@ -31,23 +39,6 @@ class _PostListingPageState extends State<PostListingPage>
   final descriptionController = TextEditingController();
 
   String selectedPropertyType = '';
-
-  late TabController _tabController;
-
-  @override
-  initState() {
-    super.initState();
-    _tabController = TabController(vsync: this, length: 3);
-    _tabController.addListener(() {
-      // _resetForms();
-    });
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
 
   final availableTimes = AvailableTimes(
     sunday: 'none',
@@ -169,9 +160,7 @@ class _PostListingPageState extends State<PostListingPage>
               mainAxisSize: MainAxisSize.min,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    debugPrint('Tapped!');
-                  },
+                  onTap: () {},
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[300],
@@ -184,7 +173,7 @@ class _PostListingPageState extends State<PostListingPage>
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          'Add Photos',
+                          'Add Property Photos',
                           style:
                               Theme.of(context).textTheme.titleMedium!.copyWith(
                                     fontWeight: FontWeight.bold,
@@ -356,13 +345,18 @@ class _PostListingPageState extends State<PostListingPage>
                     if (_propertyFormKey.currentState!.validate()) {
                       final propertyListing = PropertyListing(
                         id: const Uuid().v4(),
-                        mainImageUrl: '',
+                        username: 'Dylan W.',
+                        dateCreated:
+                            DateTime.now().subtract(const Duration(days: 4)),
+                        lastUpdated:
+                            DateTime.now().subtract(const Duration(hours: 36)),
+                        mainImageUrl: 'https://picsum.photos/id/10/300/300',
                         title:
                             '${titleController.text} - [$selectedPropertyType]',
                         price: int.tryParse(priceController.text) ?? 0,
                         location: Location(
-                          longitude: 37,
-                          latitude: 100,
+                          longitude: -118.264854,
+                          latitude: 34.077164,
                           streetAddress: streetAddressController.text,
                           city: cityController.text,
                           stateCode: stateController.text,
@@ -373,11 +367,18 @@ class _PostListingPageState extends State<PostListingPage>
                         bedroomCount: int.tryParse(bedroomController.text) ?? 0,
                         bathroomCount:
                             int.tryParse(bathroomController.text) ?? 0,
-                        imageUrls: [''],
+                        imageUrls: [
+                          'https://picsum.photos/id/10/300/300',
+                          'https://picsum.photos/id/11/300/300',
+                          'https://picsum.photos/id/12/300/300',
+                          'https://picsum.photos/id/13/300/300',
+                          'https://picsum.photos/id/14/300/300',
+                        ],
                         availableTimes: availableTimes,
                       );
 
-                      print(propertyListing.toJson());
+                      ref.read(propertyProvider).add(propertyListing);
+                      Navigator.pushNamed(context, propertyRoute);
                     }
                   },
                   style: FilledButton.styleFrom(
@@ -403,51 +404,222 @@ class _PostListingPageState extends State<PostListingPage>
   }
 
   Widget vehicleForm(double screenWidth) {
-    return Center(
-      child: Form(
-        key: _vehicleFormKey,
-        child: SizedBox(
-          width: screenWidth / 4,
-          child: Column(
-            children: [
-              DropdownButtonFormField(
-                items: const [
-                  DropdownMenuItem(
-                    value: 'Option 1',
-                    child: Text('Option 1'),
+    Widget gap = const SizedBox(height: 12);
+
+    return SingleChildScrollView(
+      child: Center(
+        child: Form(
+          key: _vehicleFormKey,
+          child: SizedBox(
+            width: screenWidth / 3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    height: screenWidth / 3,
+                    width: screenWidth / 3,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          'Add Vehicle Photos',
+                          style:
+                              Theme.of(context).textTheme.titleMedium!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        const SizedBox(height: 4),
+                        const Icon(Icons.add_photo_alternate),
+                      ],
+                    ),
                   ),
-                  DropdownMenuItem(
-                    value: 'Option 2',
-                    child: Text('Option 2'),
+                ),
+                gap,
+                TextFormField(
+                  controller: titleController,
+                  cursorHeight: 16,
+                  decoration: const InputDecoration(
+                    label: Text('Listing Title'),
                   ),
-                  DropdownMenuItem(
-                    value: 'Option 3',
-                    child: Text('Option 3'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required field';
+                    return null;
+                  },
+                ),
+                gap,
+                TextFormField(
+                  controller: mileageController,
+                  cursorHeight: 16,
+                  decoration: const InputDecoration(
+                    label: Text('Mileage'),
                   ),
-                ],
-                onChanged: (_) {},
-              ),
-              DropdownButtonFormField(
-                items: const [
-                  DropdownMenuItem(
-                    value: 'Option 1',
-                    child: Text('Option 1'),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                      RegExp(r'^[0-9]+.?[0-9]*'),
+                    )
+                  ],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required field';
+                    return null;
+                  },
+                ),
+                gap,
+                TextFormField(
+                  controller: priceController,
+                  cursorHeight: 16,
+                  maxLength: 10,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: const InputDecoration(
+                    label: Text('Price'),
                   ),
-                  DropdownMenuItem(
-                    value: 'Option 2',
-                    child: Text('Option 2'),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                      RegExp(r'^[0-9]+.?[0-9]*'),
+                    )
+                  ],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required field';
+                    return null;
+                  },
+                ),
+                gap,
+                TextFormField(
+                  controller: streetAddressController,
+                  cursorHeight: 16,
+                  maxLength: 32,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: const InputDecoration(
+                    label: Text('Street Address'),
                   ),
-                  DropdownMenuItem(
-                    value: 'Option 3',
-                    child: Text('Option 3'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required field';
+                    return null;
+                  },
+                ),
+                gap,
+                TextFormField(
+                  controller: cityController,
+                  cursorHeight: 16,
+                  maxLength: 32,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: const InputDecoration(
+                    label: Text('City'),
                   ),
-                ],
-                onChanged: (_) {},
-              ),
-              TextFormField(),
-              TextFormField(),
-              TextFormField(),
-            ],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required field';
+                    return null;
+                  },
+                ),
+                gap,
+                TextFormField(
+                  controller: stateController,
+                  cursorHeight: 16,
+                  maxLength: 2,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: const InputDecoration(
+                    label: Text('State (code)'),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required field';
+                    return null;
+                  },
+                ),
+                gap,
+                TextFormField(
+                  controller: zipCodeController,
+                  cursorHeight: 16,
+                  maxLength: 5,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: const InputDecoration(
+                    label: Text('Zip Code'),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required field';
+                    return null;
+                  },
+                ),
+                gap,
+                TextFormField(
+                  controller: descriptionController,
+                  cursorHeight: 16,
+                  maxLines: 10,
+                  minLines: 5,
+                  maxLength: 1000,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: const InputDecoration(
+                    label: Text('Description'),
+                    alignLabelWithHint: true,
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required field';
+                    return null;
+                  },
+                ),
+                gap,
+                timesAvailableSection(),
+                const SizedBox(height: 32),
+                FilledButton(
+                  onPressed: () {
+                    if (_vehicleFormKey.currentState!.validate()) {
+                      final vehicleListing = VehicleListing(
+                        id: const Uuid().v4(),
+                        username: 'Dylan W.',
+                        dateCreated:
+                            DateTime.now().subtract(const Duration(days: 4)),
+                        lastUpdated:
+                            DateTime.now().subtract(const Duration(hours: 36)),
+                        mainImageUrl: 'https://picsum.photos/id/10/300/300',
+                        title: titleController.text,
+                        mileage: int.tryParse(mileageController.text) ?? 0,
+                        price: int.tryParse(priceController.text) ?? 0,
+                        location: Location(
+                          longitude: -118.264854,
+                          latitude: 34.077164,
+                          streetAddress: streetAddressController.text,
+                          city: cityController.text,
+                          stateCode: stateController.text,
+                          stateName: stateController.text,
+                          zipCode: int.tryParse(zipCodeController.text) ?? 0,
+                        ),
+                        description: descriptionController.text,
+                        imageUrls: [
+                          'https://picsum.photos/id/10/300/300',
+                          'https://picsum.photos/id/11/300/300',
+                          'https://picsum.photos/id/12/300/300',
+                          'https://picsum.photos/id/13/300/300',
+                          'https://picsum.photos/id/14/300/300',
+                        ],
+                        availableTimes: availableTimes,
+                      );
+
+                      ref.read(vehiclesProvider).add(vehicleListing);
+                      Navigator.pushNamed(context, vehiclesRoute);
+                    }
+                  },
+                  style: FilledButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.black87,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(0),
+                      ),
+                    ),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    child: Text('Create Listing'),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -455,51 +627,217 @@ class _PostListingPageState extends State<PostListingPage>
   }
 
   Widget furnitureForm(double screenWidth) {
-    return Center(
-      child: Form(
-        key: _furnitureFormKey,
-        child: SizedBox(
-          width: screenWidth / 4,
-          child: Column(
-            children: [
-              DropdownButtonFormField(
-                items: const [
-                  DropdownMenuItem(
-                    value: 'Option 1',
-                    child: Text('Option 1'),
+    Widget gap = const SizedBox(height: 12);
+
+    return SingleChildScrollView(
+      child: Center(
+        child: Form(
+          key: _furnitureFormKey,
+          child: SizedBox(
+            width: screenWidth / 3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    height: screenWidth / 3,
+                    width: screenWidth / 3,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          'Add Furniture Photos',
+                          style:
+                              Theme.of(context).textTheme.titleMedium!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        const SizedBox(height: 4),
+                        const Icon(Icons.add_photo_alternate),
+                      ],
+                    ),
                   ),
-                  DropdownMenuItem(
-                    value: 'Option 2',
-                    child: Text('Option 2'),
+                ),
+                gap,
+                TextFormField(
+                  controller: titleController,
+                  cursorHeight: 16,
+                  decoration: const InputDecoration(
+                    label: Text('Listing Title'),
                   ),
-                  DropdownMenuItem(
-                    value: 'Option 3',
-                    child: Text('Option 3'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required field';
+                    return null;
+                  },
+                ),
+                gap,
+                TextFormField(
+                  controller: conditionController,
+                  cursorHeight: 16,
+                  decoration: const InputDecoration(
+                    label: Text('Condition'),
                   ),
-                ],
-                onChanged: (_) {},
-              ),
-              DropdownButtonFormField(
-                items: const [
-                  DropdownMenuItem(
-                    value: 'Option 1',
-                    child: Text('Option 1'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required field';
+                    return null;
+                  },
+                ),
+                gap,
+                TextFormField(
+                  controller: priceController,
+                  cursorHeight: 16,
+                  maxLength: 10,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: const InputDecoration(
+                    label: Text('Price'),
                   ),
-                  DropdownMenuItem(
-                    value: 'Option 2',
-                    child: Text('Option 2'),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                      RegExp(r'^[0-9]+.?[0-9]*'),
+                    )
+                  ],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required field';
+                    return null;
+                  },
+                ),
+                gap,
+                TextFormField(
+                  controller: streetAddressController,
+                  cursorHeight: 16,
+                  maxLength: 32,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: const InputDecoration(
+                    label: Text('Street Address'),
                   ),
-                  DropdownMenuItem(
-                    value: 'Option 3',
-                    child: Text('Option 3'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required field';
+                    return null;
+                  },
+                ),
+                gap,
+                TextFormField(
+                  controller: cityController,
+                  cursorHeight: 16,
+                  maxLength: 32,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: const InputDecoration(
+                    label: Text('City'),
                   ),
-                ],
-                onChanged: (_) {},
-              ),
-              TextFormField(),
-              TextFormField(),
-              TextFormField(),
-            ],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required field';
+                    return null;
+                  },
+                ),
+                gap,
+                TextFormField(
+                  controller: stateController,
+                  cursorHeight: 16,
+                  maxLength: 2,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: const InputDecoration(
+                    label: Text('State (code)'),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required field';
+                    return null;
+                  },
+                ),
+                gap,
+                TextFormField(
+                  controller: zipCodeController,
+                  cursorHeight: 16,
+                  maxLength: 5,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: const InputDecoration(
+                    label: Text('Zip Code'),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required field';
+                    return null;
+                  },
+                ),
+                gap,
+                TextFormField(
+                  controller: descriptionController,
+                  cursorHeight: 16,
+                  maxLines: 10,
+                  minLines: 5,
+                  maxLength: 1000,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: const InputDecoration(
+                    label: Text('Description'),
+                    alignLabelWithHint: true,
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required field';
+                    return null;
+                  },
+                ),
+                gap,
+                timesAvailableSection(),
+                const SizedBox(height: 32),
+                FilledButton(
+                  onPressed: () {
+                    if (_furnitureFormKey.currentState!.validate()) {
+                      final furnitureListing = FurnitureListing(
+                        id: const Uuid().v4(),
+                        username: 'Dylan W.',
+                        dateCreated:
+                            DateTime.now().subtract(const Duration(days: 4)),
+                        lastUpdated:
+                            DateTime.now().subtract(const Duration(hours: 36)),
+                        mainImageUrl: 'https://picsum.photos/id/10/300/300',
+                        title: titleController.text,
+                        condition: conditionController.text,
+                        price: int.tryParse(priceController.text) ?? 0,
+                        location: Location(
+                          longitude: -118.264854,
+                          latitude: 34.077164,
+                          streetAddress: streetAddressController.text,
+                          city: cityController.text,
+                          stateCode: stateController.text,
+                          stateName: stateController.text,
+                          zipCode: int.tryParse(zipCodeController.text) ?? 0,
+                        ),
+                        description: descriptionController.text,
+                        imageUrls: [
+                          'https://picsum.photos/id/10/300/300',
+                          'https://picsum.photos/id/11/300/300',
+                          'https://picsum.photos/id/12/300/300',
+                          'https://picsum.photos/id/13/300/300',
+                          'https://picsum.photos/id/14/300/300',
+                        ],
+                        availableTimes: availableTimes,
+                      );
+
+                      ref.read(furnitureProvider).add(furnitureListing);
+                      Navigator.pushNamed(context, furnitureRoute);
+                    }
+                  },
+                  style: FilledButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.black87,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(0),
+                      ),
+                    ),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    child: Text('Create Listing'),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -516,11 +854,10 @@ class _PostListingPageState extends State<PostListingPage>
           width: screenWidth / 3,
           child: Column(
             children: [
-              TabBar(
-                controller: _tabController,
+              const TabBar(
                 indicatorColor: Colors.black87,
                 labelColor: Colors.black87,
-                tabs: const [
+                tabs: [
                   Tab(text: 'Property'),
                   Tab(text: 'Vehicle'),
                   Tab(text: 'Furniture'),

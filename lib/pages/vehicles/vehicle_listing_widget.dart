@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:someonetoview/constants.dart';
 import 'package:someonetoview/models/vehicle_listing.dart';
 
 String priceFormat(int price) {
@@ -30,12 +31,10 @@ class VehicleListingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // TODO implement Vehicle listing details page
-        // final newRoute = '$furnitureDetailRoute?id=${furnitureListing.id}';
-        // Navigator.of(context).pushNamed(
-        //   furnitureDetailRoute,
-        //   arguments: furnitureListing,
-        // );
+        Navigator.of(context).pushNamed(
+          vehicleDetailRoute,
+          arguments: vehicleListing,
+        );
       },
       child: SizedBox(
         width: double.infinity,

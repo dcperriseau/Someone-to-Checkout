@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:someonetoview/models/furniture_listing.dart';
+import 'package:someonetoview/models/property_listing.dart';
+import 'package:someonetoview/models/vehicle_listing.dart';
 import 'package:someonetoview/pages/about_page.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:someonetoview/pages/contact/contact_page.dart';
 import 'package:someonetoview/pages/furniture/furniture_details_page.dart';
 import 'package:someonetoview/pages/furniture/furniture_page.dart';
 import 'package:someonetoview/pages/post_listing/post_listing_page.dart';
+import 'package:someonetoview/pages/property/property_details_page.dart';
 import 'package:someonetoview/pages/property/property_page.dart';
 import 'package:someonetoview/constants.dart';
+import 'package:someonetoview/pages/vehicles/vehicle_details_page.dart';
 import 'package:someonetoview/pages/vehicles/vehicles_page.dart';
 import 'package:someonetoview/theme.dart';
 
 void main() {
   usePathUrlStrategy();
-  runApp(const App());
+  runApp(const ProviderScope(child: App()));
 }
 
 class NoTransitionsBuilder extends PageTransitionsBuilder {
@@ -55,6 +60,16 @@ class App extends StatelessWidget {
           final args = settings.arguments as FurnitureListing;
           return MaterialPageRoute(
             builder: (context) => FurnitureDetailsPage(furnitureListing: args),
+          );
+        } else if (settings.name!.contains(propertyDetailRoute)) {
+          final args = settings.arguments as PropertyListing;
+          return MaterialPageRoute(
+            builder: (context) => PropertyDetailsPage(propertyListing: args),
+          );
+        } else if (settings.name!.contains(vehicleDetailRoute)) {
+          final args = settings.arguments as VehicleListing;
+          return MaterialPageRoute(
+            builder: (context) => VehicleDetailsPage(vehicleListing: args),
           );
         }
 

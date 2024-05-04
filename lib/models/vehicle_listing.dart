@@ -1,9 +1,13 @@
 import 'dart:convert';
 
+import 'package:someonetoview/models/available_times.dart';
 import 'package:someonetoview/models/location.dart';
 
 class VehicleListing {
   final String id;
+  final String username;
+  final DateTime dateCreated;
+  final DateTime lastUpdated;
   final String mainImageUrl;
   final String title;
   final int price;
@@ -11,9 +15,13 @@ class VehicleListing {
   final String description;
   final int mileage;
   final List<String> imageUrls;
+  final AvailableTimes? availableTimes;
 
   VehicleListing({
     required this.id,
+    required this.username,
+    required this.dateCreated,
+    required this.lastUpdated,
     required this.mainImageUrl,
     required this.title,
     required this.price,
@@ -21,10 +29,14 @@ class VehicleListing {
     required this.description,
     required this.mileage,
     required this.imageUrls,
+    this.availableTimes,
   });
 
   VehicleListing copyWith({
     String? id,
+    String? username,
+    DateTime? dateCreated,
+    DateTime? lastUpdated,
     String? mainImageUrl,
     String? title,
     int? price,
@@ -35,6 +47,9 @@ class VehicleListing {
   }) =>
       VehicleListing(
         id: id ?? this.id,
+        username: username ?? this.username,
+        dateCreated: dateCreated ?? this.dateCreated,
+        lastUpdated: lastUpdated ?? this.lastUpdated,
         mainImageUrl: mainImageUrl ?? this.mainImageUrl,
         title: title ?? this.title,
         price: price ?? this.price,
@@ -51,6 +66,9 @@ class VehicleListing {
 
   factory VehicleListing.fromMap(Map<String, dynamic> json) => VehicleListing(
         id: json['id'],
+        username: json['username'],
+        dateCreated: DateTime.parse(json['date_created']),
+        lastUpdated: DateTime.parse(json['date_created']),
         mainImageUrl: json['main_image_url'],
         title: json['title'],
         price: json['price'],
@@ -69,5 +87,6 @@ class VehicleListing {
         'description': description,
         'mileage': mileage,
         'image_urls': List<dynamic>.from(imageUrls.map((x) => x)),
+        'available_times': availableTimes?.toMap(),
       };
 }
