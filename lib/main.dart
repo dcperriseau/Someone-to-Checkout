@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:someonetoview/models/furniture_listing.dart';
 import 'package:someonetoview/pages/about_page.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
-import 'package:someonetoview/pages/contact_page.dart';
+import 'package:someonetoview/pages/contact/contact_page.dart';
 import 'package:someonetoview/pages/furniture/furniture_details_page.dart';
 import 'package:someonetoview/pages/furniture/furniture_page.dart';
-import 'package:someonetoview/pages/post_listing_page.dart';
-import 'package:someonetoview/pages/property_page.dart';
+import 'package:someonetoview/pages/post_listing/post_listing_page.dart';
+import 'package:someonetoview/pages/property/property_page.dart';
 import 'package:someonetoview/constants.dart';
 import 'package:someonetoview/pages/vehicles/vehicles_page.dart';
 import 'package:someonetoview/theme.dart';
@@ -42,6 +42,7 @@ class App extends StatelessWidget {
       themeMode: ThemeMode.light,
       initialRoute: propertyRoute,
       routes: {
+        propertyRoute: (context) => const PropertyPage(),
         vehiclesRoute: (context) => const VehiclesPage(),
         furnitureRoute: (context) => const FurniturePage(),
         // furnitureDetailRoute: (context) => const FurnitureDetailsPage(),
@@ -61,6 +62,22 @@ class App extends StatelessWidget {
           case propertyRoute:
             return MaterialPageRoute(
               builder: (context) => const PropertyPage(),
+            );
+          case vehiclesRoute:
+            return MaterialPageRoute(
+              builder: (context) => const VehiclesPage(),
+            );
+          case furnitureRoute:
+            return MaterialPageRoute(
+              builder: (context) => const FurniturePage(),
+            );
+          case aboutRoute:
+            return MaterialPageRoute(
+              builder: (context) => const AboutPage(),
+            );
+          case contactRoute:
+            return MaterialPageRoute(
+              builder: (context) => const ContactPage(),
             );
           default:
             return MaterialPageRoute(

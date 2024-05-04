@@ -1,5 +1,5 @@
 // Routes
-const String propertyRoute = '/'; // default route
+const String propertyRoute = '/property';
 const String vehiclesRoute = '/vehicles';
 const String furnitureRoute = '/furniture';
 const String furnitureDetailRoute = '/furniture/detail';

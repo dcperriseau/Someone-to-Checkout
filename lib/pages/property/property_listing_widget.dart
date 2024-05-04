@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:someonetoview/constants.dart';
-import 'package:someonetoview/models/furniture_listing.dart';
+import 'package:someonetoview/models/property_listing.dart';
+import 'package:someonetoview/pages/vehicles/vehicle_listing_widget.dart';
 
-class FurnitureListingWidget extends StatelessWidget {
-  final FurnitureListing furnitureListing;
+class PropertyListingWidget extends StatelessWidget {
+  final PropertyListing propertyListing;
 
-  const FurnitureListingWidget({super.key, required this.furnitureListing});
+  const PropertyListingWidget({super.key, required this.propertyListing});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // final newRoute = '$furnitureDetailRoute?id=${furnitureListing.id}';
-        Navigator.of(context).pushNamed(
-          furnitureDetailRoute,
-          arguments: furnitureListing,
-        );
+        // final newRoute = '$PropertyDetailRoute?id=${PropertyListing.id}';
+        // Navigator.of(context).pushNamed(
+        //   PropertyDetailRoute,
+        //   arguments: PropertyListing,
+        // );
       },
       child: SizedBox(
         width: double.infinity,
@@ -31,7 +31,7 @@ class FurnitureListingWidget extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12.0),
                   child: Image.network(
-                    furnitureListing.mainImageUrl,
+                    propertyListing.mainImageUrl,
                     fit: BoxFit.fill,
                     loadingBuilder: (context, child, loadingProgress) {
                       if (loadingProgress == null) return child;
@@ -50,19 +50,19 @@ class FurnitureListingWidget extends StatelessWidget {
             ),
             const SizedBox(height: 12.0),
             Text(
-              '\$${furnitureListing.price}',
+              '\$${priceFormat(propertyListing.price)} / month',
               style:
                   const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
             ),
             Text(
-              furnitureListing.title,
+              propertyListing.title,
             ),
             Text(
-              'Condition: ${furnitureListing.condition}',
+              '${propertyListing.bedroomCount}BR, ${propertyListing.bathroomCount}B',
               style: TextStyle(color: Colors.grey[600]),
             ),
             Text(
-              '${furnitureListing.location.city}, ${furnitureListing.location.stateCode}',
+              '${propertyListing.location.city}, ${propertyListing.location.stateCode}',
               style: TextStyle(color: Colors.grey[600]),
             ),
           ],

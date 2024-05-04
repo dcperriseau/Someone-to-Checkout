@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:someonetoview/constants.dart';
 
-const selectedStyle = TextStyle(
-  fontWeight: FontWeight.bold,
-  decoration: TextDecoration.underline,
-  fontSize: 16,
-  fontFamily: robotoFont,
-);
-
 const defaultStyle = TextStyle(
   fontWeight: FontWeight.bold,
   fontSize: 16,
   fontFamily: robotoFont,
+  color: Colors.black87,
 );
 
 class MainAppBar extends StatelessWidget {
@@ -19,70 +13,60 @@ class MainAppBar extends StatelessWidget {
 
   const MainAppBar({super.key, required this.route});
 
+  Widget customLine(BuildContext context, double textWidth) {
+    return Container(
+      color: Colors.black87,
+      height: 2,
+      width: textWidth / 2.2,
+    );
+  }
+
+  Widget headerButton(
+    BuildContext context, {
+    required String title,
+    required String currentRoute,
+  }) {
+    return TextButton(
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Text(
+            title,
+            style: defaultStyle,
+          ),
+          if (route == currentRoute)
+            customLine(context, (title.length * defaultStyle.fontSize!))
+        ],
+      ),
+      onPressed: () {
+        Navigator.pushNamed(context, currentRoute);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
       automaticallyImplyLeading: false,
-      title: const Text('Someone To View'),
+      title: Text(
+        'Someone To View',
+        style: Theme.of(context)
+            .textTheme
+            .headlineMedium!
+            .copyWith(fontWeight: FontWeight.bold, color: Colors.black87),
+      ),
       pinned: true,
       scrolledUnderElevation: 0,
       elevation: 0,
       backgroundColor: Theme.of(context).colorScheme.background,
       actions: [
-        TextButton(
-          child: Text(
-            'Property',
-            style: route == propertyRoute ? selectedStyle : defaultStyle,
-          ),
-          onPressed: () {
-            Navigator.pushNamed(context, propertyRoute);
-          },
-        ),
-        TextButton(
-          child: Text(
-            'Vehicles',
-            style: route == vehiclesRoute ? selectedStyle : defaultStyle,
-          ),
-          onPressed: () {
-            Navigator.pushNamed(context, vehiclesRoute);
-          },
-        ),
-        TextButton(
-          child: Text(
-            'Furniture',
-            style: route == furnitureRoute ? selectedStyle : defaultStyle,
-          ),
-          onPressed: () {
-            Navigator.pushNamed(context, furnitureRoute);
-          },
-        ),
-        TextButton(
-          child: Text(
-            'About',
-            style: route == aboutRoute ? selectedStyle : defaultStyle,
-          ),
-          onPressed: () {
-            Navigator.pushNamed(context, aboutRoute);
-          },
-        ),
-        TextButton(
-          child: Text(
-            'Post Listing',
-            style: route == postListingRoute ? selectedStyle : defaultStyle,
-          ),
-          onPressed: () {
-            Navigator.pushNamed(context, postListingRoute);
-          },
-        ),
-        TextButton(
-          child: Text(
-            'Contact',
-            style: route == contactRoute ? selectedStyle : defaultStyle,
-          ),
-          onPressed: () {
-            Navigator.pushNamed(context, contactRoute);
-          },
-        ),
+        headerButton(context, title: 'Property', currentRoute: propertyRoute),
+        headerButton(context, title: 'Vehicles', currentRoute: vehiclesRoute),
+        headerButton(context, title: 'Furniture', currentRoute: furnitureRoute),
+        headerButton(context, title: 'About', currentRoute: aboutRoute),
+        headerButton(context,
+            title: 'Post Listing', currentRoute: postListingRoute),
+        headerButton(context, title: 'Contact', currentRoute: contactRoute),
       ],
     );
   }

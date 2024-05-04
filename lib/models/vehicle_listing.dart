@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:someonetoview/models/location.dart';
 
 class VehicleListing {
+  final String id;
   final String mainImageUrl;
   final String title;
   final int price;
@@ -12,6 +13,7 @@ class VehicleListing {
   final List<String> imageUrls;
 
   VehicleListing({
+    required this.id,
     required this.mainImageUrl,
     required this.title,
     required this.price,
@@ -22,6 +24,7 @@ class VehicleListing {
   });
 
   VehicleListing copyWith({
+    String? id,
     String? mainImageUrl,
     String? title,
     int? price,
@@ -31,6 +34,7 @@ class VehicleListing {
     List<String>? imageUrls,
   }) =>
       VehicleListing(
+        id: id ?? this.id,
         mainImageUrl: mainImageUrl ?? this.mainImageUrl,
         title: title ?? this.title,
         price: price ?? this.price,
@@ -46,6 +50,7 @@ class VehicleListing {
   String toJson() => json.encode(toMap());
 
   factory VehicleListing.fromMap(Map<String, dynamic> json) => VehicleListing(
+        id: json['id'],
         mainImageUrl: json['main_image_url'],
         title: json['title'],
         price: json['price'],
@@ -56,6 +61,7 @@ class VehicleListing {
       );
 
   Map<String, dynamic> toMap() => {
+        'id': id,
         'main_image_url': mainImageUrl,
         'title': title,
         'price': price,

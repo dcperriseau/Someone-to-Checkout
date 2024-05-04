@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:someonetoview/constants.dart';
 import 'package:someonetoview/main.dart';
 
-final customTheme = ThemeData.light().copyWith(
+final customTheme = ThemeData(
+  brightness: Brightness.light,
+  fontFamily: robotoFont,
   colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
   textTheme: Typography().black.apply(fontFamily: openSansFont),
   pageTransitionsTheme: PageTransitionsTheme(
