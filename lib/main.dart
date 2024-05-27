@@ -15,9 +15,15 @@ import 'package:someonetoview/constants.dart';
 import 'package:someonetoview/pages/vehicles/vehicle_details_page.dart';
 import 'package:someonetoview/pages/vehicles/vehicles_page.dart';
 import 'package:someonetoview/theme.dart';
+import 'package:firebase_core/firebase_core.dart'; //test test test test 
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized; // ensure plugin services are initialized
   usePathUrlStrategy();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+    );
   runApp(const ProviderScope(child: App()));
 }
 
