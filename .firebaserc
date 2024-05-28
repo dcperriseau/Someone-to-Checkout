@@ -1,5 +1,8 @@
 {
   "projects": {
     "default": "sightonscene-a87ca"
-  }
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
 }

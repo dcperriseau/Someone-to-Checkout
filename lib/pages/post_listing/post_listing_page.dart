@@ -13,6 +13,8 @@ import 'package:someonetoview/providers/furniture_provider.dart';
 import 'package:someonetoview/providers/property_provider.dart';
 import 'package:someonetoview/providers/vehicles_provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:someonetoview/firestore_service.dart'; // Import the FirestoreService
+
 
 class PostListingPage extends ConsumerStatefulWidget {
   const PostListingPage({super.key});
@@ -89,27 +91,94 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
   void _updateTimeSlot(String day, String start, String end) {
     switch (day) {
       case 'Sunday':
-        availableTimes.sunday = [TimeSlot(start: start, end: end)];
+        availableTimes.sunday = 'none';
         break;
       case 'Monday':
-        availableTimes.monday = [TimeSlot(start: start, end: end)];
+        availableTimes.monday = 'none';
         break;
       case 'Tuesday':
-        availableTimes.tuesday = [TimeSlot(start: start, end: end)];
+        availableTimes.tuesday = 'none';
         break;
       case 'Wednesday':
-        availableTimes.wednesday = [TimeSlot(start: start, end: end)];
+        availableTimes.wednesday = 'none';
         break;
       case 'Thursday':
-        availableTimes.thursday = [TimeSlot(start: start, end: end)];
+        availableTimes.thursday = 'none';
         break;
       case 'Friday':
-        availableTimes.friday = [TimeSlot(start: start, end: end)];
+        availableTimes.friday = 'none';
         break;
       case 'Saturday':
-        availableTimes.saturday = [TimeSlot(start: start, end: end)];
+        availableTimes.saturday = 'none';
         break;
     }
+  }
+
+  Future<void> _uploadPost(String type) async {
+    final firestoreService = FirestoreService();
+    Map<String, dynamic> postData;
+
+    if (type == 'property') {
+      postData = {
+        'id': const Uuid().v4(),
+        'username': 'Dylan W.',
+        'dateCreated': DateTime.now(),
+        'lastUpdated': DateTime.now(),
+        'title': '${titleController.text} - [$selectedPropertyType]',
+        'price': int.tryParse(priceController.text) ?? 0,
+        'location': {
+          'streetAddress': streetAddressController.text,
+          'city': cityController.text,
+          'stateCode': stateController.text,
+          'zipCode': int.tryParse(zipCodeController.text) ?? 0,
+        },
+        'description': descriptionController.text,
+        'bedroomCount': int.tryParse(bedroomController.text) ?? 0,
+        'bathroomCount': int.tryParse(bathroomController.text) ?? 0,
+        'availableTimes': availableTimes.toMap(),
+        'type': 'property',
+      };
+    } else if (type == 'vehicle') {
+      postData = {
+        'id': const Uuid().v4(),
+        'username': 'Dylan W.',
+        'dateCreated': DateTime.now(),
+        'lastUpdated': DateTime.now(),
+        'title': titleController.text,
+        'mileage': int.tryParse(mileageController.text) ?? 0,
+        'price': int.tryParse(priceController.text) ?? 0,
+        'location': {
+          'streetAddress': streetAddressController.text,
+          'city': cityController.text,
+          'stateCode': stateController.text,
+          'zipCode': int.tryParse(zipCodeController.text) ?? 0,
+        },
+        'description': descriptionController.text,
+        'availableTimes': availableTimes.toMap(),
+        'type': 'vehicle',
+      };
+    } else {
+      postData = {
+        'id': const Uuid().v4(),
+        'username': 'Dylan W.',
+        'dateCreated': DateTime.now(),
+        'lastUpdated': DateTime.now(),
+        'title': titleController.text,
+        'condition': conditionController.text,
+        'price': int.tryParse(priceController.text) ?? 0,
+        'location': {
+          'streetAddress': streetAddressController.text,
+          'city': cityController.text,
+          'stateCode': stateController.text,
+          'zipCode': int.tryParse(zipCodeController.text) ?? 0,
+        },
+        'description': descriptionController.text,
+        'availableTimes': availableTimes.toMap(),
+        'type': 'furniture',
+      };
+    }
+
+    await firestoreService.addPost(postData);
   }
 
   Widget timesAvailableSection() {
@@ -233,7 +302,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
                   controller: bathroomController,
                   cursorHeight: 16,
                   decoration: const InputDecoration(
-                    label: Text('Number of Bedrooms'),
+                    label: Text('Number of Bathrooms'), // Corrected label
                   ),
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(
@@ -341,43 +410,9 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
                 timesAvailableSection(),
                 const SizedBox(height: 32),
                 FilledButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_propertyFormKey.currentState!.validate()) {
-                      final propertyListing = PropertyListing(
-                        id: const Uuid().v4(),
-                        username: 'Dylan W.',
-                        dateCreated:
-                            DateTime.now().subtract(const Duration(days: 4)),
-                        lastUpdated:
-                            DateTime.now().subtract(const Duration(hours: 36)),
-                        mainImageUrl: 'https://picsum.photos/id/10/300/300',
-                        title:
-                            '${titleController.text} - [$selectedPropertyType]',
-                        price: int.tryParse(priceController.text) ?? 0,
-                        location: Location(
-                          longitude: -118.264854,
-                          latitude: 34.077164,
-                          streetAddress: streetAddressController.text,
-                          city: cityController.text,
-                          stateCode: stateController.text,
-                          stateName: stateController.text,
-                          zipCode: int.tryParse(zipCodeController.text) ?? 0,
-                        ),
-                        description: descriptionController.text,
-                        bedroomCount: int.tryParse(bedroomController.text) ?? 0,
-                        bathroomCount:
-                            int.tryParse(bathroomController.text) ?? 0,
-                        imageUrls: [
-                          'https://picsum.photos/id/10/300/300',
-                          'https://picsum.photos/id/11/300/300',
-                          'https://picsum.photos/id/12/300/300',
-                          'https://picsum.photos/id/13/300/300',
-                          'https://picsum.photos/id/14/300/300',
-                        ],
-                        availableTimes: availableTimes,
-                      );
-
-                      ref.read(propertyProvider).add(propertyListing);
+                      await _uploadPost('property');
                       Navigator.pushNamed(context, propertyRoute);
                     }
                   },
@@ -567,40 +602,9 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
                 timesAvailableSection(),
                 const SizedBox(height: 32),
                 FilledButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_vehicleFormKey.currentState!.validate()) {
-                      final vehicleListing = VehicleListing(
-                        id: const Uuid().v4(),
-                        username: 'Dylan W.',
-                        dateCreated:
-                            DateTime.now().subtract(const Duration(days: 4)),
-                        lastUpdated:
-                            DateTime.now().subtract(const Duration(hours: 36)),
-                        mainImageUrl: 'https://picsum.photos/id/10/300/300',
-                        title: titleController.text,
-                        mileage: int.tryParse(mileageController.text) ?? 0,
-                        price: int.tryParse(priceController.text) ?? 0,
-                        location: Location(
-                          longitude: -118.264854,
-                          latitude: 34.077164,
-                          streetAddress: streetAddressController.text,
-                          city: cityController.text,
-                          stateCode: stateController.text,
-                          stateName: stateController.text,
-                          zipCode: int.tryParse(zipCodeController.text) ?? 0,
-                        ),
-                        description: descriptionController.text,
-                        imageUrls: [
-                          'https://picsum.photos/id/10/300/300',
-                          'https://picsum.photos/id/11/300/300',
-                          'https://picsum.photos/id/12/300/300',
-                          'https://picsum.photos/id/13/300/300',
-                          'https://picsum.photos/id/14/300/300',
-                        ],
-                        availableTimes: availableTimes,
-                      );
-
-                      ref.read(vehiclesProvider).add(vehicleListing);
+                      await _uploadPost('vehicle');
                       Navigator.pushNamed(context, vehiclesRoute);
                     }
                   },
@@ -785,40 +789,9 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
                 timesAvailableSection(),
                 const SizedBox(height: 32),
                 FilledButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_furnitureFormKey.currentState!.validate()) {
-                      final furnitureListing = FurnitureListing(
-                        id: const Uuid().v4(),
-                        username: 'Dylan W.',
-                        dateCreated:
-                            DateTime.now().subtract(const Duration(days: 4)),
-                        lastUpdated:
-                            DateTime.now().subtract(const Duration(hours: 36)),
-                        mainImageUrl: 'https://picsum.photos/id/10/300/300',
-                        title: titleController.text,
-                        condition: conditionController.text,
-                        price: int.tryParse(priceController.text) ?? 0,
-                        location: Location(
-                          longitude: -118.264854,
-                          latitude: 34.077164,
-                          streetAddress: streetAddressController.text,
-                          city: cityController.text,
-                          stateCode: stateController.text,
-                          stateName: stateController.text,
-                          zipCode: int.tryParse(zipCodeController.text) ?? 0,
-                        ),
-                        description: descriptionController.text,
-                        imageUrls: [
-                          'https://picsum.photos/id/10/300/300',
-                          'https://picsum.photos/id/11/300/300',
-                          'https://picsum.photos/id/12/300/300',
-                          'https://picsum.photos/id/13/300/300',
-                          'https://picsum.photos/id/14/300/300',
-                        ],
-                        availableTimes: availableTimes,
-                      );
-
-                      ref.read(furnitureProvider).add(furnitureListing);
+                      await _uploadPost('furniture');
                       Navigator.pushNamed(context, furnitureRoute);
                     }
                   },
