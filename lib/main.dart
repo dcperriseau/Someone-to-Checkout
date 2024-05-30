@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:someonetoview/models/furniture_listing.dart';
 import 'package:someonetoview/models/property_listing.dart';
 import 'package:someonetoview/models/vehicle_listing.dart';
@@ -15,15 +17,13 @@ import 'package:someonetoview/constants.dart';
 import 'package:someonetoview/pages/vehicles/vehicle_details_page.dart';
 import 'package:someonetoview/pages/vehicles/vehicles_page.dart';
 import 'package:someonetoview/theme.dart';
-import 'package:firebase_core/firebase_core.dart'; //test test test test 
-import 'firebase_options.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized; // ensure plugin services are initialized
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure plugin services are initialized
   usePathUrlStrategy();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-    );
+  );
   runApp(const ProviderScope(child: App()));
 }
 
@@ -38,7 +38,7 @@ class NoTransitionsBuilder extends PageTransitionsBuilder {
     Animation<double> secondaryAnimation,
     Widget? child,
   ) {
-    // only return the child without warping it with animations
+    // Only return the child without wrapping it with animations
     return child!;
   }
 }
@@ -56,7 +56,6 @@ class App extends StatelessWidget {
         propertyRoute: (context) => const PropertyPage(),
         vehiclesRoute: (context) => const VehiclesPage(),
         furnitureRoute: (context) => const FurniturePage(),
-        // furnitureDetailRoute: (context) => const FurnitureDetailsPage(),
         aboutRoute: (context) => const AboutPage(),
         postListingRoute: (context) => const PostListingPage(),
         contactRoute: (context) => const ContactPage(),

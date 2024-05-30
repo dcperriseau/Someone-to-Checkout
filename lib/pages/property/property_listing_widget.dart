@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:someonetoview/constants.dart';
 import 'package:someonetoview/models/property_listing.dart';
 import 'package:someonetoview/pages/vehicles/vehicle_listing_widget.dart';
+import 'package:someonetoview/firestore_service.dart';
 
 class PropertyListingWidget extends StatelessWidget {
   final PropertyListing propertyListing;
 
   const PropertyListingWidget({super.key, required this.propertyListing});
+
+  void _deleteListing(BuildContext context) async {
+    final firestoreService = FirestoreService();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Listing deleted')),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +74,8 @@ class PropertyListingWidget extends StatelessWidget {
               '${propertyListing.location.city}, ${propertyListing.location.stateCode}',
               style: TextStyle(color: Colors.grey[600]),
             ),
+      
+      
           ],
         ),
       ),

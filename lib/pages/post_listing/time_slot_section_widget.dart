@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class TimeSlotSection extends StatefulWidget {
   final String day;
   final Map<String, bool> dayValues;
-  final Function onTimeSlotChanged;
-  final Function onDayCheckChanged;
+  final Function(String, String, String) onTimeSlotChanged;
+  final Function(String) onDayCheckChanged;
 
   const TimeSlotSection({
     super.key,
@@ -32,12 +32,12 @@ class TimeSlotSectionState extends State<TimeSlotSection> {
   }
 
   List<String> _generateTimeOptions() {
-    // ignore: no_leading_underscores_for_local_identifiers
     List<String> _timeOptions = [];
     for (int hour = 0; hour < 24; hour++) {
       String hourString = (hour % 12 == 0 ? 12 : hour % 12).toString();
       String amPm = hour < 12 ? 'AM' : 'PM';
       _timeOptions.add('$hourString:00 $amPm');
+      _timeOptions.add('$hourString:30 $amPm'); // Adding 30-minute intervals
     }
     return _timeOptions;
   }
@@ -69,29 +69,26 @@ class TimeSlotSectionState extends State<TimeSlotSection> {
             ),
             Text(widget.day),
             const SizedBox(width: 12),
-            Expanded(child: StatefulBuilder(
-              builder: (context, newSetState) {
-                return DropdownButtonFormField(
-                  decoration: const InputDecoration(
-                    label: Text('Start Time'),
-                  ),
-                  items: timeOptions
-                      .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                      .toList(),
-                  value: start.isEmpty ? null : start,
-                  onChanged: !checked
-                      ? null
-                      : (String? value) {
-                          if (value == null || value.isEmpty) return;
-                          newSetState(() {
-                            // Update the start time of the timeSlot for the current day
-                            start = value;
-                          });
-                          widget.onTimeSlotChanged(widget.day, start, end);
-                        },
-                );
-              },
-            )),
+            Expanded(
+              child: DropdownButtonFormField(
+                decoration: const InputDecoration(
+                  label: Text('Start Time'),
+                ),
+                items: timeOptions
+                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                    .toList(),
+                value: start.isEmpty ? null : start,
+                onChanged: !checked
+                    ? null
+                    : (String? value) {
+                        if (value == null || value.isEmpty) return;
+                        setState(() {
+                          start = value;
+                        });
+                        widget.onTimeSlotChanged(widget.day, start, end);
+                      },
+              ),
+            ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 12),
               child: Text('to'),

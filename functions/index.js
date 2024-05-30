@@ -1,4 +1,4 @@
-// Setting up payment intent
+
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const stripe = require("stripe")(functions.config().stripe.secret); // Add your Stripe secret key to Firebase config

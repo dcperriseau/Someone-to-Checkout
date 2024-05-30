@@ -34,7 +34,8 @@ class PropertyListing {
     this.availableTimes,
   });
 
-  PropertyListing copyWith({
+  PropertyListing copyWith({ //allows you to create an existing instance while changing 
+  //some of its properties. paramaters not provided will default to their current values in the instance
     String? id,
     String? username,
     DateTime? dateCreated,
@@ -65,11 +66,14 @@ class PropertyListing {
         availableTimes: availableTimes ?? this.availableTimes,
       );
 
+//constructor that parses a JSON-encoded string to create a new PropertyListing instance
+//uses the json.decode method to first convert the string to a Map, then passes it to fromMap
   factory PropertyListing.fromJson(String str) =>
       PropertyListing.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
+//first converts the instance to a Map using toMap and then encodes this Map as a string using json.encode
   factory PropertyListing.fromMap(Map<String, dynamic> json) => PropertyListing(
         id: json['id'],
         username: json['username'],
@@ -85,6 +89,7 @@ class PropertyListing {
         imageUrls: List<String>.from(json['image_urls'].map((x) => x)),
       );
 
+//constructor that creates a new PropertyListing instance from a Map
   Map<String, dynamic> toMap() => {
         'id': id,
         'username': username,
