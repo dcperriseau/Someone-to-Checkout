@@ -71,7 +71,7 @@ class FurnitureListing {
         id: json['id'],
         username: json['username'],
         dateCreated: DateTime.parse(json['date_created']),
-        lastUpdated: DateTime.parse(json['date_created']),
+        lastUpdated: DateTime.parse(json['last_updated']),
         mainImageUrl: json['main_image_url'],
         title: json['title'],
         price: json['price'],
@@ -79,7 +79,9 @@ class FurnitureListing {
         description: json['description'],
         condition: json['condition'],
         imageUrls: List<String>.from(json['image_urls'].map((x) => x)),
-        availableTimes: AvailableTimes.fromJson(json['available_times']),
+        availableTimes: json['available_times'] != null
+            ? AvailableTimes.fromJson(json['available_times'])
+            : null,
       );
 
   Map<String, dynamic> toMap() => {
@@ -93,7 +95,7 @@ class FurnitureListing {
         'location': location.toMap(),
         'description': description,
         'condition': condition,
-        'image_urls': List<String>.from(imageUrls.map((x) => x)),
+        'image_urls': List<dynamic>.from(imageUrls.map((x) => x)),
         'available_times': availableTimes?.toMap(),
       };
 }

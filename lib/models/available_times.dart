@@ -17,6 +17,7 @@ class AvailableTimes {
     required this.saturday,
   });
 
+  // Return text for a given day's available times
   String dayText(dynamic day) {
     if (day is String) {
       return 'None';
@@ -26,62 +27,48 @@ class AvailableTimes {
     }
   }
 
+  // Create an instance of AvailableTimes from JSON
   factory AvailableTimes.fromJson(Map<String, dynamic> json) {
     return AvailableTimes(
-      sunday: json['sunday'] is String
-          ? json['sunday']
-          : (json['sunday'] as List).map((e) => TimeSlot.fromJson(e)).toList(),
-      monday: json['monday'] is String
-          ? json['monday']
-          : (json['monday'] as List).map((e) => TimeSlot.fromJson(e)).toList(),
-      tuesday: json['tuesday'] is String
-          ? json['tuesday']
-          : (json['tuesday'] as List).map((e) => TimeSlot.fromJson(e)).toList(),
-      wednesday: json['wednesday'] is String
-          ? json['wednesday']
-          : (json['wednesday'] as List)
-              .map((e) => TimeSlot.fromJson(e))
-              .toList(),
-      thursday: json['thursday'] is String
-          ? json['thursday']
-          : (json['thursday'] as List)
-              .map((e) => TimeSlot.fromJson(e))
-              .toList(),
-      friday: json['friday'] is String
-          ? json['friday']
-          : (json['friday'] as List).map((e) => TimeSlot.fromJson(e)).toList(),
-      saturday: json['saturday'] is String
-          ? json['saturday']
-          : (json['saturday'] as List)
-              .map((e) => TimeSlot.fromJson(e))
-              .toList(),
+      sunday: _parseDay(json['sunday']),
+      monday: _parseDay(json['monday']),
+      tuesday: _parseDay(json['tuesday']),
+      wednesday: _parseDay(json['wednesday']),
+      thursday: _parseDay(json['thursday']),
+      friday: _parseDay(json['friday']),
+      saturday: _parseDay(json['saturday']),
     );
   }
 
+  // Parse a day's times (either "none" or a list of TimeSlots)
+  static dynamic _parseDay(dynamic day) {
+    if (day is String) {
+      return day;
+    } else {
+      return (day as List).map((e) => TimeSlot.fromJson(e)).toList();
+    }
+  }
+
+  // Convert the AvailableTimes instance to a map for Firestore
   Map<String, dynamic> toMap() {
     return {
-      'sunday': sunday is String
-          ? sunday
-          : (sunday as List<TimeSlot>).map((e) => e.toMap()).toList(),
-      'monday': monday is String
-          ? monday
-          : (monday as List<TimeSlot>).map((e) => e.toMap()).toList(),
-      'tuesday': tuesday is String
-          ? tuesday
-          : (tuesday as List<TimeSlot>).map((e) => e.toMap()).toList(),
-      'wednesday': wednesday is String
-          ? wednesday
-          : (wednesday as List<TimeSlot>).map((e) => e.toMap()).toList(),
-      'thursday': thursday is String
-          ? thursday
-          : (thursday as List<TimeSlot>).map((e) => e.toMap()).toList(),
-      'friday': friday is String
-          ? friday
-          : (friday as List<TimeSlot>).map((e) => e.toMap()).toList(),
-      'saturday': saturday is String
-          ? saturday
-          : (saturday as List<TimeSlot>).map((e) => e.toMap()).toList(),
+      'sunday': _dayToMap(sunday),
+      'monday': _dayToMap(monday),
+      'tuesday': _dayToMap(tuesday),
+      'wednesday': _dayToMap(wednesday),
+      'thursday': _dayToMap(thursday),
+      'friday': _dayToMap(friday),
+      'saturday': _dayToMap(saturday),
     };
+  }
+
+  // Convert a day's times to a map
+  static dynamic _dayToMap(dynamic day) {
+    if (day is String) {
+      return day;
+    } else {
+      return (day as List<TimeSlot>).map((e) => e.toMap()).toList();
+    }
   }
 }
 
@@ -100,6 +87,7 @@ class TimeSlot {
         end: end ?? this.end,
       );
 
+  // Create an instance of TimeSlot from JSON
   factory TimeSlot.fromJson(Map<String, dynamic> json) {
     return TimeSlot(
       start: json['start'],
@@ -107,6 +95,7 @@ class TimeSlot {
     );
   }
 
+  // Convert the TimeSlot instance to a map for Firestore
   Map<String, dynamic> toMap() {
     return {
       'start': start,

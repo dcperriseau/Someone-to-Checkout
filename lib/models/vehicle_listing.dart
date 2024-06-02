@@ -44,6 +44,7 @@ class VehicleListing {
     String? description,
     int? mileage,
     List<String>? imageUrls,
+    AvailableTimes? availableTimes,
   }) =>
       VehicleListing(
         id: id ?? this.id,
@@ -57,6 +58,7 @@ class VehicleListing {
         description: description ?? this.description,
         mileage: mileage ?? this.mileage,
         imageUrls: imageUrls ?? this.imageUrls,
+        availableTimes: availableTimes ?? this.availableTimes,
       );
 
   factory VehicleListing.fromJson(String str) =>
@@ -68,7 +70,7 @@ class VehicleListing {
         id: json['id'],
         username: json['username'],
         dateCreated: DateTime.parse(json['date_created']),
-        lastUpdated: DateTime.parse(json['date_created']),
+        lastUpdated: DateTime.parse(json['last_updated']),
         mainImageUrl: json['main_image_url'],
         title: json['title'],
         price: json['price'],
@@ -76,10 +78,16 @@ class VehicleListing {
         description: json['description'],
         mileage: json['mileage'],
         imageUrls: List<String>.from(json['image_urls'].map((x) => x)),
+        availableTimes: json['available_times'] != null
+            ? AvailableTimes.fromJson(json['available_times'])
+            : null,
       );
 
   Map<String, dynamic> toMap() => {
         'id': id,
+        'username': username,
+        'date_created': dateCreated.toIso8601String(),
+        'last_updated': lastUpdated.toIso8601String(),
         'main_image_url': mainImageUrl,
         'title': title,
         'price': price,
