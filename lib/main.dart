@@ -17,13 +17,19 @@ import 'package:someonetoview/constants.dart';
 import 'package:someonetoview/pages/vehicles/vehicle_details_page.dart';
 import 'package:someonetoview/pages/vehicles/vehicles_page.dart';
 import 'package:someonetoview/theme.dart';
+import 'package:someonetoview/pages/payment/payment_screen.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Ensure plugin services are initialized
+  WidgetsFlutterBinding.ensureInitialized(); 
   usePathUrlStrategy();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  runApp(const ProviderScope(child: App()));
+
+  // Initialize Stripe with your publishable key
+  Stripe.publishableKey = 'pk_live_51PKNI2GDWcOLiYf2JXRspBmODIUpsTVcRez14ZzJy0sJYHqU78eLYybiZmClaQXea0tRlfiP99HRCJy9xzy7YcDQ00LGExfvhF'; //Stripe publishable key
   runApp(const ProviderScope(child: App()));
 }
 

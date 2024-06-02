@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:someonetoview/constants.dart';
 import 'package:someonetoview/models/furniture_listing.dart';
+import 'package:intl/intl.dart';
 
 class FurnitureListingWidget extends StatelessWidget {
   final FurnitureListing furnitureListing;
 
   const FurnitureListingWidget({super.key, required this.furnitureListing});
 
+  String priceFormat(int price) {
+    final formatter = NumberFormat.currency(symbol: '\$', decimalDigits: 0);
+    return formatter.format(price);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // final newRoute = '$furnitureDetailRoute?id=${furnitureListing.id}';
         Navigator.of(context).pushNamed(
           furnitureDetailRoute,
           arguments: furnitureListing,
@@ -50,9 +55,11 @@ class FurnitureListingWidget extends StatelessWidget {
             ),
             const SizedBox(height: 12.0),
             Text(
-              '\$${furnitureListing.price}',
-              style:
-                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+              priceFormat(furnitureListing.price),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16.0,
+              ),
             ),
             Text(
               furnitureListing.title,

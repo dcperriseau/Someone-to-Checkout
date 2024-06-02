@@ -15,6 +15,7 @@ class _PropertyPageState extends ConsumerState<PropertyPage> {
   @override
   Widget build(BuildContext context) {
     final propertyList = ref.watch(propertyProvider);
+    final isLoading = propertyList.isEmpty;
 
     double width = MediaQuery.of(context).size.width;
 
@@ -23,33 +24,27 @@ class _PropertyPageState extends ConsumerState<PropertyPage> {
         body: CustomScrollView(
           slivers: [
             MainAppBar(route: ModalRoute.of(context)?.settings.name ?? ''),
-            propertyList.when(
-              data: (listings) => SliverFillRemaining(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Center(
-                    child: listings.isEmpty
-                        ? const Center(child: Text('No Property Listings'))
-                        : GridView.extent(
-                            maxCrossAxisExtent: width / 4,
-                            crossAxisSpacing: 12,
-                            mainAxisSpacing: 20,
-                            children: [
-                              for (final listing in listings)
-                                PropertyListingWidget(
-                                    propertyListing: listing)
-                            ],
-                          ),
-                  ),
-                ),
-              ),
-              loading: () => const SliverFillRemaining(
+            if (isLoading)
+              const SliverFillRemaining(
                 child: Center(child: CircularProgressIndicator()),
+              )
+            else if (propertyList.isNotEmpty)
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                sliver: SliverGrid.extent(
+                  maxCrossAxisExtent: width / 4,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 20,
+                  children: [
+                    for (final listing in propertyList)
+                      PropertyListingWidget(propertyListing: listing),
+                  ],
+                ),
+              )
+            else
+              const SliverFillRemaining(
+                child: Center(child: Text('Error loading listings')),
               ),
-              error: (error, stackTrace) => SliverFillRemaining(
-                child: Center(child: Text('Error: $error')),
-              ),
-            ),
           ],
         ),
       ),

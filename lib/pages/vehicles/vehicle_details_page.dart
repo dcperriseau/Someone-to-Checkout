@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:someonetoview/main_app_bar.dart';
 import 'package:someonetoview/models/vehicle_listing.dart';
-import 'package:someonetoview/pages/vehicles/vehicle_listing_widget.dart';
+import 'package:someonetoview/pages/payment/payment_screen.dart';
 
 class VehicleDetailsPage extends ConsumerStatefulWidget {
   final VehicleListing vehicleListing;
@@ -13,10 +13,10 @@ class VehicleDetailsPage extends ConsumerStatefulWidget {
   const VehicleDetailsPage({super.key, required this.vehicleListing});
 
   @override
-  ConsumerState createState() => _FurnitureDetailsPageState();
+  ConsumerState createState() => _VehicleDetailsPageState();
 }
 
-class _FurnitureDetailsPageState extends ConsumerState<VehicleDetailsPage> {
+class _VehicleDetailsPageState extends ConsumerState<VehicleDetailsPage> {
   int selectedImage = 0;
 
   LatLng getCoords() {
@@ -55,8 +55,7 @@ class _FurnitureDetailsPageState extends ConsumerState<VehicleDetailsPage> {
             attributions: [
               TextSourceAttribution(
                 'OpenStreetMap contributors',
-                onTap:
-                    () {}, // launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
+                onTap: () {},
               ),
             ],
           ),
@@ -119,6 +118,19 @@ class _FurnitureDetailsPageState extends ConsumerState<VehicleDetailsPage> {
     );
   }
 
+  String priceFormat(int price) {
+    final formatter = NumberFormat.currency(symbol: '\$', decimalDigits: 0);
+    return formatter.format(price);
+  }
+
+  String formatNumber(int number) {
+    if (number >= 1000) {
+      return '${(number / 1000).toStringAsFixed(0)}k';
+    } else {
+      return number.toString();
+    }
+  }
+
   Widget detailsSection() {
     return Expanded(
       child: Padding(
@@ -129,7 +141,7 @@ class _FurnitureDetailsPageState extends ConsumerState<VehicleDetailsPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Price: \$${priceFormat(widget.vehicleListing.price)}',
+              'Price: ${priceFormat(widget.vehicleListing.price)}',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             Text(
@@ -152,7 +164,17 @@ class _FurnitureDetailsPageState extends ConsumerState<VehicleDetailsPage> {
             const Divider(),
             const SizedBox(height: 16),
             FilledButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PaymentScreen(
+                      amount: 2000,
+                      description: 'Send Someone To View This',
+                      currency: 'usd',
+                    ),
+                  ),
+                );
+              },
               style: FilledButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.black87,
@@ -174,7 +196,17 @@ class _FurnitureDetailsPageState extends ConsumerState<VehicleDetailsPage> {
             ),
             const SizedBox(height: 16),
             FilledButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PaymentScreen(
+                      amount: 2000,
+                      description: 'Have Someone Keep You Company',
+                      currency: 'usd',
+                    ),
+                  ),
+                );
+              },
               style: FilledButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.black87,
@@ -186,10 +218,12 @@ class _FurnitureDetailsPageState extends ConsumerState<VehicleDetailsPage> {
               ),
               child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: Text(
-                  'Have Someone Keep You Company',
-                  style: TextStyle(
-                    fontSize: 18,
+                child: Center(
+                  child: Text(
+                    'Have Someone Keep You Company',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ),
@@ -275,8 +309,7 @@ class _FurnitureDetailsPageState extends ConsumerState<VehicleDetailsPage> {
                                 const SizedBox(height: 12),
                                 Text(
                                   widget.vehicleListing.description,
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
+                                  style: Theme.of(context).textTheme.titleMedium,
                                 ),
                               ],
                             ),

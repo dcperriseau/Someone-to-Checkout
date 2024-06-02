@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:someonetoview/models/available_times.dart';
 import 'package:someonetoview/models/location.dart';
 
@@ -61,13 +60,11 @@ class FurnitureListing {
         availableTimes: availableTimes ?? this.availableTimes,
       );
 
-  factory FurnitureListing.fromJson(String str) =>
-      FurnitureListing.fromMap(json.decode(str));
+  factory FurnitureListing.fromJson(Map<String, dynamic> json) => FurnitureListing.fromMap(json);
 
   String toJson() => json.encode(toMap());
 
-  factory FurnitureListing.fromMap(Map<String, dynamic> json) =>
-      FurnitureListing(
+  factory FurnitureListing.fromMap(Map<String, dynamic> json) => FurnitureListing(
         id: json['id'],
         username: json['username'],
         dateCreated: DateTime.parse(json['date_created']),
@@ -79,9 +76,7 @@ class FurnitureListing {
         description: json['description'],
         condition: json['condition'],
         imageUrls: List<String>.from(json['image_urls'].map((x) => x)),
-        availableTimes: json['available_times'] != null
-            ? AvailableTimes.fromJson(json['available_times'])
-            : null,
+        availableTimes: json['available_times'] != null ? AvailableTimes.fromJson(json['available_times']) : null,
       );
 
   Map<String, dynamic> toMap() => {

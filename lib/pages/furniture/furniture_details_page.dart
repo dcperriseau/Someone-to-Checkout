@@ -6,6 +6,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:someonetoview/main_app_bar.dart';
 import 'package:someonetoview/models/furniture_listing.dart';
 import 'package:someonetoview/pages/vehicles/vehicle_listing_widget.dart';
+import 'package:someonetoview/pages/payment/payment_screen.dart';
 
 class FurnitureDetailsPage extends StatefulWidget {
   final FurnitureListing furnitureListing;
@@ -152,7 +153,17 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
             const Divider(),
             const SizedBox(height: 16),
             FilledButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PaymentScreen(
+                      description: "Send Someone To View This",
+                      amount: 2000, // Amount in cents ($20.00)
+                      currency: 'usd', 
+                    ),
+                  ),
+                );
+              },
               style: FilledButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.black87,
@@ -164,17 +175,29 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Text(
-                  'Send Someone To View This',
-                  style: TextStyle(
-                    fontSize: 18,
+                child: Center(
+                  child: Text(
+                    'Send Someone To View This',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ),
             ),
             SizedBox(height: 16),
             FilledButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PaymentScreen(
+                      description: "Have Someone Keep You Company",
+                      amount: 2000, // Amount in cents ($20)
+                      currency: 'usd', 
+                    ),
+                  ),
+                );
+              },
               style: FilledButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.black87,
@@ -186,10 +209,12 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Text(
-                  'Have Someone Keep You Company',
-                  style: TextStyle(
-                    fontSize: 18,
+                child: Center(
+                  child: Text(
+                    'Have Someone Keep You Company',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ),
@@ -275,8 +300,7 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
                                 SizedBox(height: 12),
                                 Text(
                                   widget.furnitureListing.description,
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
+                                  style: Theme.of(context).textTheme.titleMedium,
                                 ),
                               ],
                             ),
@@ -313,4 +337,9 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
       ),
     );
   }
+}
+
+String priceFormat(int price) {
+  final formatter = NumberFormat.currency(symbol: '\$', decimalDigits: 0);
+  return formatter.format(price);
 }
