@@ -5,6 +5,7 @@ import 'package:someonetoview/models/location.dart';
 class FurnitureListing {
   final String id;
   final String username;
+  final String userEmail;
   final DateTime dateCreated;
   final DateTime lastUpdated;
   final String mainImageUrl;
@@ -19,6 +20,7 @@ class FurnitureListing {
   FurnitureListing({
     required this.id,
     required this.username,
+    required this.userEmail,
     required this.dateCreated,
     required this.lastUpdated,
     required this.mainImageUrl,
@@ -34,6 +36,7 @@ class FurnitureListing {
   FurnitureListing copyWith({
     String? id,
     String? username,
+    String? userEmail,
     DateTime? dateCreated,
     DateTime? lastUpdated,
     String? mainImageUrl,
@@ -48,6 +51,7 @@ class FurnitureListing {
       FurnitureListing(
         id: id ?? this.id,
         username: username ?? this.username,
+        userEmail: userEmail ?? this.userEmail,
         dateCreated: dateCreated ?? this.dateCreated,
         lastUpdated: lastUpdated ?? this.lastUpdated,
         mainImageUrl: mainImageUrl ?? this.mainImageUrl,
@@ -67,6 +71,7 @@ class FurnitureListing {
   factory FurnitureListing.fromMap(Map<String, dynamic> json) => FurnitureListing(
         id: json['id'],
         username: json['username'],
+        userEmail: json['userEmail'],
         dateCreated: DateTime.parse(json['date_created']),
         lastUpdated: DateTime.parse(json['last_updated']),
         mainImageUrl: json['main_image_url'],

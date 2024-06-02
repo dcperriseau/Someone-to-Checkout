@@ -51,6 +51,7 @@ class FirestoreService {
   }
 
   // Update a post in Firestore
+  // Update a post in Firestore
   Future<void> updatePost(dynamic listing) async {
     try {
       if (listing is PropertyListing) {

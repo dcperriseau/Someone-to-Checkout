@@ -5,7 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:someonetoview/main_app_bar.dart';
 import 'package:someonetoview/models/vehicle_listing.dart';
-import 'package:someonetoview/pages/payment/payment_screen.dart';
+import 'package:someonetoview/pages/booking/booking_details_page.dart';
+
 
 class VehicleDetailsPage extends ConsumerStatefulWidget {
   final VehicleListing vehicleListing;
@@ -32,8 +33,8 @@ class _VehicleDetailsPageState extends ConsumerState<VehicleDetailsPage> {
       width: MediaQuery.of(context).size.width / 5,
       child: FlutterMap(
         options: MapOptions(
-          initialCenter: getCoords(),
-          initialZoom: 13,
+          center: getCoords(),
+          zoom: 13,
         ),
         children: [
           TileLayer(
@@ -167,10 +168,10 @@ class _VehicleDetailsPageState extends ConsumerState<VehicleDetailsPage> {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => PaymentScreen(
+                    builder: (context) => BookingDetailsPage(
                       amount: 2000,
                       description: 'Send Someone To View This',
-                      currency: 'usd',
+                      availableTimes: widget.vehicleListing.availableTimes!,
                     ),
                   ),
                 );
@@ -199,10 +200,10 @@ class _VehicleDetailsPageState extends ConsumerState<VehicleDetailsPage> {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => PaymentScreen(
+                    builder: (context) => BookingDetailsPage(
                       amount: 2000,
                       description: 'Have Someone Keep You Company',
-                      currency: 'usd',
+                      availableTimes: widget.vehicleListing.availableTimes!,
                     ),
                   ),
                 );

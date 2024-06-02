@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:cloud_functions/cloud_function.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 
 class PaymentScreen extends StatefulWidget {
   final int amount; // Amount in cents
   final String currency;
   final String description;
 
-  const PaymentScreen({Key? key, required this.amount, required this.currency, required this.description}) : super(key: key);
+  const PaymentScreen({
+    Key? key,
+    required this.amount,
+    required this.currency,
+    required this.description,
+  }) : super(key: key);
 
   @override
   _PaymentScreenState createState() => _PaymentScreenState();
@@ -31,10 +36,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
       final clientSecret = response.data['clientSecret'];
 
-      // Create a payment method
-      final paymentMethod = await Stripe.instance.createPaymentMethod(
-        PaymentMethodParams.card(
-          paymentMethodData: PaymentMethodData(
+      // Create a payment method and confirm the payment
+      final paymentIntent = await Stripe.instance.confirmPayment(
+        paymentIntentClientSecret: clientSecret,
+        data: PaymentMethodParams.card(
+          paymentMethodData: const PaymentMethodData(
             billingDetails: BillingDetails(
               email: 'email@example.com',
               phone: '+48888000888',
@@ -51,24 +57,17 @@ class _PaymentScreenState extends State<PaymentScreen> {
         ),
       );
 
-      // Confirm the payment
-      await Stripe.instance.confirmPayment(
-        paymentIntentClientSecret: clientSecret,
-        data: PaymentMethodParams.cardFromMethodId(
-          paymentMethodId: paymentMethod.id,
-        ),
-      );
-
       // Handle successful payment
       setState(() {
         _isLoading = false;
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Payment successful')),
+        const SnackBar(content: Text('Payment successful, your booking is confirmed. You will recieve an email confirmation shortyly.')),
       );
 
       // Navigate or perform further actions
+      Navigator.of(context).pop(); // Go back to the previous screen or home
 
     } catch (e) {
       // Handle payment error

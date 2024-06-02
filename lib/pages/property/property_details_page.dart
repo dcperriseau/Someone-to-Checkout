@@ -7,6 +7,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:someonetoview/main_app_bar.dart';
 import 'package:someonetoview/models/property_listing.dart';
 import 'package:someonetoview/pages/vehicles/vehicle_listing_widget.dart';
+import 'package:someonetoview/pages/booking/booking_details_page.dart';
 
 class PropertyDetailsPage extends ConsumerStatefulWidget {
   final PropertyListing propertyListing;
@@ -14,10 +15,10 @@ class PropertyDetailsPage extends ConsumerStatefulWidget {
   const PropertyDetailsPage({super.key, required this.propertyListing});
 
   @override
-  ConsumerState createState() => _FurnitureDetailsPageState();
+  ConsumerState createState() => _PropertyDetailsPageState();
 }
 
-class _FurnitureDetailsPageState extends ConsumerState<PropertyDetailsPage> {
+class _PropertyDetailsPageState extends ConsumerState<PropertyDetailsPage> {
   int selectedImage = 0;
 
   LatLng getCoords() {
@@ -33,8 +34,8 @@ class _FurnitureDetailsPageState extends ConsumerState<PropertyDetailsPage> {
       width: MediaQuery.of(context).size.width / 5,
       child: FlutterMap(
         options: MapOptions(
-          initialCenter: getCoords(),
-          initialZoom: 13,
+          center: getCoords(),
+          zoom: 13,
         ),
         children: [
           TileLayer(
@@ -56,8 +57,7 @@ class _FurnitureDetailsPageState extends ConsumerState<PropertyDetailsPage> {
             attributions: [
               TextSourceAttribution(
                 'OpenStreetMap contributors',
-                onTap:
-                    () {}, // launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
+                onTap: () {},
               ),
             ],
           ),
@@ -120,6 +120,11 @@ class _FurnitureDetailsPageState extends ConsumerState<PropertyDetailsPage> {
     );
   }
 
+  String priceFormat(int price) {
+    final formatter = NumberFormat.currency(symbol: '\$', decimalDigits: 0);
+    return formatter.format(price);
+  }
+
   Widget detailsSection() {
     return Expanded(
       child: Padding(
@@ -130,7 +135,7 @@ class _FurnitureDetailsPageState extends ConsumerState<PropertyDetailsPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Price: \$${priceFormat(widget.propertyListing.price)}',
+              'Price: ${priceFormat(widget.propertyListing.price)}',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             Text(
@@ -157,18 +162,28 @@ class _FurnitureDetailsPageState extends ConsumerState<PropertyDetailsPage> {
             const Divider(),
             const SizedBox(height: 16),
             FilledButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => BookingDetailsPage(
+                      amount: 2000,
+                      description: 'Send Someone To View This',
+                      availableTimes: widget.propertyListing.availableTimes!,
+                    ),
+                  ),
+                );
+              },
               style: FilledButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.black87,
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(0),
                   ),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
                 child: Text(
                   'Send Someone To View This',
                   style: TextStyle(
@@ -179,11 +194,21 @@ class _FurnitureDetailsPageState extends ConsumerState<PropertyDetailsPage> {
             ),
             SizedBox(height: 16),
             FilledButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => BookingDetailsPage(
+                      amount: 2000,
+                      description: 'Have Someone Keep You Company',
+                      availableTimes: widget.propertyListing.availableTimes!,
+                    ),
+                  ),
+                );
+              },
               style: FilledButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.black87,
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(0),
                   ),

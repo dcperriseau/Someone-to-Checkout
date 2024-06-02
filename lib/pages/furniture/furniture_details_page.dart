@@ -6,7 +6,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:someonetoview/main_app_bar.dart';
 import 'package:someonetoview/models/furniture_listing.dart';
 import 'package:someonetoview/pages/vehicles/vehicle_listing_widget.dart';
-import 'package:someonetoview/pages/payment/payment_screen.dart';
+import 'package:someonetoview/pages/booking/booking_details_page.dart';
 
 class FurnitureDetailsPage extends StatefulWidget {
   final FurnitureListing furnitureListing;
@@ -33,8 +33,8 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
       width: MediaQuery.of(context).size.width / 5,
       child: FlutterMap(
         options: MapOptions(
-          initialCenter: getCoords(),
-          initialZoom: 13,
+          center: getCoords(),
+          zoom: 13,
         ),
         children: [
           TileLayer(
@@ -56,8 +56,7 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
             attributions: [
               TextSourceAttribution(
                 'OpenStreetMap contributors',
-                onTap:
-                    () {}, // launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
+                onTap: () {},
               ),
             ],
           ),
@@ -120,6 +119,11 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
     );
   }
 
+  String priceFormat(int price) {
+    final formatter = NumberFormat.currency(symbol: '\$', decimalDigits: 0);
+    return formatter.format(price);
+  }
+
   Widget detailsSection() {
     return Expanded(
       child: Padding(
@@ -130,7 +134,7 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Price: \$${priceFormat(widget.furnitureListing.price)}',
+              'Price: ${priceFormat(widget.furnitureListing.price)}',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             Text(
@@ -156,10 +160,10 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => PaymentScreen(
-                      description: "Send Someone To View This",
-                      amount: 2000, // Amount in cents ($20.00)
-                      currency: 'usd', 
+                    builder: (context) => BookingDetailsPage(
+                      amount: 2000,
+                      description: 'Send Someone To View This',
+                      availableTimes: widget.furnitureListing.availableTimes!,
                     ),
                   ),
                 );
@@ -167,20 +171,18 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
               style: FilledButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.black87,
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(0),
                   ),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Center(
-                  child: Text(
-                    'Send Someone To View This',
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text(
+                  'Send Someone To View This',
+                  style: TextStyle(
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -190,10 +192,10 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => PaymentScreen(
-                      description: "Have Someone Keep You Company",
-                      amount: 2000, // Amount in cents ($20)
-                      currency: 'usd', 
+                    builder: (context) => BookingDetailsPage(
+                      amount: 2000,
+                      description: 'Have Someone Keep You Company',
+                      availableTimes: widget.furnitureListing.availableTimes!,
                     ),
                   ),
                 );
@@ -201,7 +203,7 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
               style: FilledButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.black87,
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(0),
                   ),
@@ -337,9 +339,4 @@ class _FurnitureDetailsPageState extends State<FurnitureDetailsPage> {
       ),
     );
   }
-}
-
-String priceFormat(int price) {
-  final formatter = NumberFormat.currency(symbol: '\$', decimalDigits: 0);
-  return formatter.format(price);
 }
