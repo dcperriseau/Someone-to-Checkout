@@ -39,6 +39,8 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
   final stateController = TextEditingController();
   final zipCodeController = TextEditingController();
   final descriptionController = TextEditingController();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
 
   String selectedPropertyType = '';
 
@@ -121,7 +123,8 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
     if (type == 'property') {
       postData = {
         'id': const Uuid().v4(),
-        'username': 'Dylan W.',
+        'username': nameController.text,
+        'userEmail': emailController.text,
         'dateCreated': DateTime.now(),
         'lastUpdated': DateTime.now(),
         'title': '${titleController.text} - [$selectedPropertyType]',
@@ -141,7 +144,8 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
     } else if (type == 'vehicle') {
       postData = {
         'id': const Uuid().v4(),
-        'username': 'Dylan W.',
+        'username': nameController.text,
+        'userEmail': emailController.text,
         'dateCreated': DateTime.now(),
         'lastUpdated': DateTime.now(),
         'title': titleController.text,
@@ -160,7 +164,8 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
     } else {
       postData = {
         'id': const Uuid().v4(),
-        'username': 'Dylan W.',
+        'username': nameController.text,
+        'userEmail': emailController.text,
         'dateCreated': DateTime.now(),
         'lastUpdated': DateTime.now(),
         'title': titleController.text,
@@ -222,216 +227,244 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
       child: Center(
         child: Form(
           key: _propertyFormKey,
-          child: SizedBox(
-            width: screenWidth / 3,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(12.0),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              double formWidth = constraints.maxWidth < 600 ? constraints.maxWidth * 0.9 : screenWidth / 3;
+              return SizedBox(
+                width: formWidth,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFormField(
+                      controller: nameController,
+                      cursorHeight: 16,
+                      decoration: const InputDecoration(
+                        label: Text('Your Name'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
                     ),
-                    height: screenWidth / 3,
-                    width: screenWidth / 3,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Add Property Photos',
-                          style:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
+                    gap,
+                    TextFormField(
+                      controller: emailController,
+                      cursorHeight: 16,
+                      decoration: const InputDecoration(
+                        label: Text('Your Email'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        height: formWidth / 3,
+                        width: formWidth / 3,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              'Add Property Photos',
+                              style: Theme.of(context).textTheme.titleMedium!.copyWith(
                                     fontWeight: FontWeight.bold,
                                   ),
+                            ),
+                            const SizedBox(height: 4),
+                            const Icon(Icons.add_photo_alternate),
+                          ],
                         ),
-                        const SizedBox(height: 4),
-                        const Icon(Icons.add_photo_alternate),
-                      ],
-                    ),
-                  ),
-                ),
-                gap,
-                const Text('Property Type'),
-                DropdownButtonFormField(
-                  hint: const Text('Select a property type'),
-                  items: propertyTypes
-                      .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                      .toList(),
-                  onChanged: (value) {
-                    if (value == null || value.isEmpty) return;
-                    setState(() {
-                      selectedPropertyType = value;
-                    });
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: titleController,
-                  cursorHeight: 16,
-                  decoration: const InputDecoration(
-                    label: Text('Listing Title'),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: bedroomController,
-                  cursorHeight: 16,
-                  decoration: const InputDecoration(
-                    label: Text('Number of Bedrooms'),
-                  ),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                      RegExp(r'^[0-9]+.?[0-9]*'),
-                    )
-                  ],
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: bathroomController,
-                  cursorHeight: 16,
-                  decoration: const InputDecoration(
-                    label: Text('Number of Bathrooms'), // Corrected label
-                  ),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                      RegExp(r'^[0-9]+.?[0-9]*'),
-                    )
-                  ],
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: priceController,
-                  cursorHeight: 16,
-                  maxLength: 10,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  decoration: const InputDecoration(
-                    label: Text('Price'),
-                  ),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                      RegExp(r'^[0-9]+.?[0-9]*'),
-                    )
-                  ],
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: streetAddressController,
-                  cursorHeight: 16,
-                  maxLength: 32,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  decoration: const InputDecoration(
-                    label: Text('Street Address'),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: cityController,
-                  cursorHeight: 16,
-                  maxLength: 32,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  decoration: const InputDecoration(
-                    label: Text('City'),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: stateController,
-                  cursorHeight: 16,
-                  maxLength: 2,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  decoration: const InputDecoration(
-                    label: Text('State (code)'),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: zipCodeController,
-                  cursorHeight: 16,
-                  maxLength: 5,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  decoration: const InputDecoration(
-                    label: Text('Zip Code'),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: descriptionController,
-                  cursorHeight: 16,
-                  maxLines: 10,
-                  minLines: 5,
-                  maxLength: 1000,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  decoration: const InputDecoration(
-                    label: Text('Description'),
-                    alignLabelWithHint: true,
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                timesAvailableSection(),
-                const SizedBox(height: 32),
-                FilledButton(
-                  onPressed: () async {
-                    if (_propertyFormKey.currentState!.validate()) {
-                      await _uploadPost('property');
-                      Navigator.pushNamed(context, propertyRoute);
-                    }
-                  },
-                  style: FilledButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.black87,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(0),
                       ),
                     ),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    child: Text('Create Listing'),
-                  ),
+                    gap,
+                    const Text('Property Type'),
+                    DropdownButtonFormField(
+                      hint: const Text('Select a property type'),
+                      items: propertyTypes
+                          .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                          .toList(),
+                      onChanged: (value) {
+                        if (value == null || value.isEmpty) return;
+                        setState(() {
+                          selectedPropertyType = value;
+                        });
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: titleController,
+                      cursorHeight: 16,
+                      decoration: const InputDecoration(
+                        label: Text('Listing Title'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: bedroomController,
+                      cursorHeight: 16,
+                      decoration: const InputDecoration(
+                        label: Text('Number of Bedrooms'),
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'^[0-9]+.?[0-9]*'),
+                        )
+                      ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: bathroomController,
+                      cursorHeight: 16,
+                      decoration: const InputDecoration(
+                        label: Text('Number of Bathrooms'),
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'^[0-9]+.?[0-9]*'),
+                        )
+                      ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: priceController,
+                      cursorHeight: 16,
+                      maxLength: 10,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: const InputDecoration(
+                        label: Text('Price'),
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'^[0-9]+.?[0-9]*'),
+                        )
+                      ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: streetAddressController,
+                      cursorHeight: 16,
+                      maxLength: 32,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: const InputDecoration(
+                        label: Text('Street Address'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: cityController,
+                      cursorHeight: 16,
+                      maxLength: 32,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: const InputDecoration(
+                        label: Text('City'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: stateController,
+                      cursorHeight: 16,
+                      maxLength: 2,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: const InputDecoration(
+                        label: Text('State (code)'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: zipCodeController,
+                      cursorHeight: 16,
+                      maxLength: 5,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: const InputDecoration(
+                        label: Text('Zip Code'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: descriptionController,
+                      cursorHeight: 16,
+                      maxLines: 10,
+                      minLines: 5,
+                      maxLength: 1000,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: const InputDecoration(
+                        label: Text('Description'),
+                        alignLabelWithHint: true,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    timesAvailableSection(),
+                    const SizedBox(height: 32),
+                    FilledButton(
+                      onPressed: () async {
+                        if (_propertyFormKey.currentState!.validate()) {
+                          await _uploadPost('property');
+                          Navigator.pushNamed(context, propertyRoute);
+                        }
+                      },
+                      style: FilledButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.black87,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(0),
+                          ),
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        child: Text('Create Listing'),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),
@@ -445,185 +478,213 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
       child: Center(
         child: Form(
           key: _vehicleFormKey,
-          child: SizedBox(
-            width: screenWidth / 3,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(12.0),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              double formWidth = constraints.maxWidth < 600 ? constraints.maxWidth * 0.9 : screenWidth / 3;
+              return SizedBox(
+                width: formWidth,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFormField(
+                      controller: nameController,
+                      cursorHeight: 16,
+                      decoration: const InputDecoration(
+                        label: Text('Your Name'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
                     ),
-                    height: screenWidth / 3,
-                    width: screenWidth / 3,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Add Vehicle Photos',
-                          style:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
+                    gap,
+                    TextFormField(
+                      controller: emailController,
+                      cursorHeight: 16,
+                      decoration: const InputDecoration(
+                        label: Text('Your Email'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        height: formWidth / 3,
+                        width: formWidth / 3,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              'Add Vehicle Photos',
+                              style: Theme.of(context).textTheme.titleMedium!.copyWith(
                                     fontWeight: FontWeight.bold,
                                   ),
+                            ),
+                            const SizedBox(height: 4),
+                            const Icon(Icons.add_photo_alternate),
+                          ],
                         ),
-                        const SizedBox(height: 4),
-                        const Icon(Icons.add_photo_alternate),
-                      ],
-                    ),
-                  ),
-                ),
-                gap,
-                TextFormField(
-                  controller: titleController,
-                  cursorHeight: 16,
-                  decoration: const InputDecoration(
-                    label: Text('Listing Title'),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: mileageController,
-                  cursorHeight: 16,
-                  decoration: const InputDecoration(
-                    label: Text('Mileage'),
-                  ),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                      RegExp(r'^[0-9]+.?[0-9]*'),
-                    )
-                  ],
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: priceController,
-                  cursorHeight: 16,
-                  maxLength: 10,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  decoration: const InputDecoration(
-                    label: Text('Price'),
-                  ),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                      RegExp(r'^[0-9]+.?[0-9]*'),
-                    )
-                  ],
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: streetAddressController,
-                  cursorHeight: 16,
-                  maxLength: 32,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  decoration: const InputDecoration(
-                    label: Text('Street Address'),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: cityController,
-                  cursorHeight: 16,
-                  maxLength: 32,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  decoration: const InputDecoration(
-                    label: Text('City'),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: stateController,
-                  cursorHeight: 16,
-                  maxLength: 2,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  decoration: const InputDecoration(
-                    label: Text('State (code)'),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: zipCodeController,
-                  cursorHeight: 16,
-                  maxLength: 5,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  decoration: const InputDecoration(
-                    label: Text('Zip Code'),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: descriptionController,
-                  cursorHeight: 16,
-                  maxLines: 10,
-                  minLines: 5,
-                  maxLength: 1000,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  decoration: const InputDecoration(
-                    label: Text('Description'),
-                    alignLabelWithHint: true,
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                timesAvailableSection(),
-                const SizedBox(height: 32),
-                FilledButton(
-                  onPressed: () async {
-                    if (_vehicleFormKey.currentState!.validate()) {
-                      await _uploadPost('vehicle');
-                      Navigator.pushNamed(context, vehiclesRoute);
-                    }
-                  },
-                  style: FilledButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.black87,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(0),
                       ),
                     ),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    child: Text('Create Listing'),
-                  ),
+                    gap,
+                    TextFormField(
+                      controller: titleController,
+                      cursorHeight: 16,
+                      decoration: const InputDecoration(
+                        label: Text('Listing Title'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: mileageController,
+                      cursorHeight: 16,
+                      decoration: const InputDecoration(
+                        label: Text('Mileage'),
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'^[0-9]+.?[0-9]*'),
+                        )
+                      ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: priceController,
+                      cursorHeight: 16,
+                      maxLength: 10,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: const InputDecoration(
+                        label: Text('Price'),
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'^[0-9]+.?[0-9]*'),
+                        )
+                      ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: streetAddressController,
+                      cursorHeight: 16,
+                      maxLength: 32,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: const InputDecoration(
+                        label: Text('Street Address'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: cityController,
+                      cursorHeight: 16,
+                      maxLength: 32,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: const InputDecoration(
+                        label: Text('City'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: stateController,
+                      cursorHeight: 16,
+                      maxLength: 2,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: const InputDecoration(
+                        label: Text('State (code)'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: zipCodeController,
+                      cursorHeight: 16,
+                      maxLength: 5,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: const InputDecoration(
+                        label: Text('Zip Code'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: descriptionController,
+                      cursorHeight: 16,
+                      maxLines: 10,
+                      minLines: 5,
+                      maxLength: 1000,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: const InputDecoration(
+                        label: Text('Description'),
+                        alignLabelWithHint: true,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    timesAvailableSection(),
+                    const SizedBox(height: 32),
+                    FilledButton(
+                      onPressed: () async {
+                        if (_vehicleFormKey.currentState!.validate()) {
+                          await _uploadPost('vehicle');
+                          Navigator.pushNamed(context, vehiclesRoute);
+                        }
+                      },
+                      style: FilledButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.black87,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(0),
+                          ),
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        child: Text('Create Listing'),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),
@@ -637,180 +698,208 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
       child: Center(
         child: Form(
           key: _furnitureFormKey,
-          child: SizedBox(
-            width: screenWidth / 3,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(12.0),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              double formWidth = constraints.maxWidth < 600 ? constraints.maxWidth * 0.9 : screenWidth / 3;
+              return SizedBox(
+                width: formWidth,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFormField(
+                      controller: nameController,
+                      cursorHeight: 16,
+                      decoration: const InputDecoration(
+                        label: Text('Your Name'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
                     ),
-                    height: screenWidth / 3,
-                    width: screenWidth / 3,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Add Furniture Photos',
-                          style:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
+                    gap,
+                    TextFormField(
+                      controller: emailController,
+                      cursorHeight: 16,
+                      decoration: const InputDecoration(
+                        label: Text('Your Email'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        height: formWidth / 3,
+                        width: formWidth / 3,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              'Add Furniture Photos',
+                              style: Theme.of(context).textTheme.titleMedium!.copyWith(
                                     fontWeight: FontWeight.bold,
                                   ),
+                            ),
+                            const SizedBox(height: 4),
+                            const Icon(Icons.add_photo_alternate),
+                          ],
                         ),
-                        const SizedBox(height: 4),
-                        const Icon(Icons.add_photo_alternate),
-                      ],
-                    ),
-                  ),
-                ),
-                gap,
-                TextFormField(
-                  controller: titleController,
-                  cursorHeight: 16,
-                  decoration: const InputDecoration(
-                    label: Text('Listing Title'),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: conditionController,
-                  cursorHeight: 16,
-                  decoration: const InputDecoration(
-                    label: Text('Condition'),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: priceController,
-                  cursorHeight: 16,
-                  maxLength: 10,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  decoration: const InputDecoration(
-                    label: Text('Price'),
-                  ),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                      RegExp(r'^[0-9]+.?[0-9]*'),
-                    )
-                  ],
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: streetAddressController,
-                  cursorHeight: 16,
-                  maxLength: 32,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  decoration: const InputDecoration(
-                    label: Text('Street Address'),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: cityController,
-                  cursorHeight: 16,
-                  maxLength: 32,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  decoration: const InputDecoration(
-                    label: Text('City'),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: stateController,
-                  cursorHeight: 16,
-                  maxLength: 2,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  decoration: const InputDecoration(
-                    label: Text('State (code)'),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: zipCodeController,
-                  cursorHeight: 16,
-                  maxLength: 5,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  decoration: const InputDecoration(
-                    label: Text('Zip Code'),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                TextFormField(
-                  controller: descriptionController,
-                  cursorHeight: 16,
-                  maxLines: 10,
-                  minLines: 5,
-                  maxLength: 1000,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  decoration: const InputDecoration(
-                    label: Text('Description'),
-                    alignLabelWithHint: true,
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required field';
-                    return null;
-                  },
-                ),
-                gap,
-                timesAvailableSection(),
-                const SizedBox(height: 32),
-                FilledButton(
-                  onPressed: () async {
-                    if (_furnitureFormKey.currentState!.validate()) {
-                      await _uploadPost('furniture');
-                      Navigator.pushNamed(context, furnitureRoute);
-                    }
-                  },
-                  style: FilledButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.black87,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(0),
                       ),
                     ),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    child: Text('Create Listing'),
-                  ),
+                    gap,
+                    TextFormField(
+                      controller: titleController,
+                      cursorHeight: 16,
+                      decoration: const InputDecoration(
+                        label: Text('Listing Title'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: conditionController,
+                      cursorHeight: 16,
+                      decoration: const InputDecoration(
+                        label: Text('Condition'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: priceController,
+                      cursorHeight: 16,
+                      maxLength: 10,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: const InputDecoration(
+                        label: Text('Price'),
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'^[0-9]+.?[0-9]*'),
+                        )
+                      ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: streetAddressController,
+                      cursorHeight: 16,
+                      maxLength: 32,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: const InputDecoration(
+                        label: Text('Street Address'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: cityController,
+                      cursorHeight: 16,
+                      maxLength: 32,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: const InputDecoration(
+                        label: Text('City'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: stateController,
+                      cursorHeight: 16,
+                      maxLength: 2,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: const InputDecoration(
+                        label: Text('State (code)'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: zipCodeController,
+                      cursorHeight: 16,
+                      maxLength: 5,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: const InputDecoration(
+                        label: Text('Zip Code'),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    TextFormField(
+                      controller: descriptionController,
+                      cursorHeight: 16,
+                      maxLines: 10,
+                      minLines: 5,
+                      maxLength: 1000,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: const InputDecoration(
+                        label: Text('Description'),
+                        alignLabelWithHint: true,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Required field';
+                        return null;
+                      },
+                    ),
+                    gap,
+                    timesAvailableSection(),
+                    const SizedBox(height: 32),
+                    FilledButton(
+                      onPressed: () async {
+                        if (_furnitureFormKey.currentState!.validate()) {
+                          await _uploadPost('furniture');
+                          Navigator.pushNamed(context, furnitureRoute);
+                        }
+                      },
+                      style: FilledButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.black87,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(0),
+                          ),
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        child: Text('Create Listing'),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),
@@ -824,7 +913,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
       child: DefaultTabController(
         length: 3,
         child: SizedBox(
-          width: screenWidth / 3,
+          width: screenWidth,
           child: Column(
             children: [
               const TabBar(

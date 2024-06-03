@@ -17,8 +17,6 @@ class _PropertyPageState extends ConsumerState<PropertyPage> {
     final propertyList = ref.watch(propertyProvider);
     final isLoading = propertyList.isEmpty;
 
-    double width = MediaQuery.of(context).size.width;
-
     return SelectionArea(
       child: Scaffold(
         body: CustomScrollView(
@@ -29,17 +27,34 @@ class _PropertyPageState extends ConsumerState<PropertyPage> {
                 child: Center(child: CircularProgressIndicator()),
               )
             else if (propertyList.isNotEmpty)
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                sliver: SliverGrid.extent(
-                  maxCrossAxisExtent: width / 4,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 20,
-                  children: [
-                    for (final listing in propertyList)
-                      PropertyListingWidget(propertyListing: listing),
-                  ],
-                ),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  double width = constraints.maxWidth;
+                  int crossAxisCount = 1;
+                  
+                  if (width > 600) {
+                    crossAxisCount = 2;
+                  }
+                  if (width > 900) {
+                    crossAxisCount = 3;
+                  }
+                  if (width > 1200) {
+                    crossAxisCount = 4;
+                  }
+
+                  return SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    sliver: SliverGrid.count(
+                      crossAxisCount: crossAxisCount,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 20,
+                      children: [
+                        for (final listing in propertyList)
+                          PropertyListingWidget(propertyListing: listing),
+                      ],
+                    ),
+                  );
+                },
               )
             else
               const SliverFillRemaining(

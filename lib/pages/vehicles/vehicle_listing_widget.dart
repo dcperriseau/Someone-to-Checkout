@@ -29,64 +29,74 @@ class VehicleListingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).pushNamed(
-          vehicleDetailRoute,
-          arguments: vehicleListing,
-        );
-      },
-      child: SizedBox(
-        width: double.infinity,
-        height: 400,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: SizedBox(
-                width: 300,
-                height: 300,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12.0),
-                  child: Image.network(
-                    vehicleListing.mainImageUrl,
-                    fit: BoxFit.fill,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Center(
-                        child: Text('Image Failed to Load'),
-                      );
-                    },
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        bool isMobile = constraints.maxWidth < 600;
+        double imageHeight = isMobile ? 200 : 300;
+        double imageWidth = isMobile
+            ? constraints.maxWidth - 32 // full width for mobile
+            : 300;
+
+        return GestureDetector(
+          onTap: () {
+            Navigator.of(context).pushNamed(
+              vehicleDetailRoute,
+              arguments: vehicleListing,
+            );
+          },
+          child: SizedBox(
+            width: double.infinity,
+            height: isMobile ? 300 : 400,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    width: imageWidth,
+                    height: imageHeight,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12.0),
+                      child: Image.network(
+                        vehicleListing.mainImageUrl,
+                        fit: BoxFit.fill,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Center(
+                            child: Text('Image Failed to Load'),
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                const SizedBox(height: 12.0),
+                Text(
+                  '\$${priceFormat(vehicleListing.price)}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16.0),
+                ),
+                Text(
+                  vehicleListing.title,
+                ),
+                Text(
+                  '${formatNumber(vehicleListing.mileage)} Miles',
+                  style: TextStyle(color: Colors.grey[600]),
+                ),
+                Text(
+                  '${vehicleListing.location.city}, ${vehicleListing.location.stateCode}',
+                  style: TextStyle(color: Colors.grey[600]),
+                ),
+              ],
             ),
-            const SizedBox(height: 12.0),
-            Text(
-              '\$${priceFormat(vehicleListing.price)}',
-              style:
-                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-            ),
-            Text(
-              vehicleListing.title,
-            ),
-            Text(
-              '${formatNumber(vehicleListing.mileage)} Miles',
-              style: TextStyle(color: Colors.grey[600]),
-            ),
-            Text(
-              '${vehicleListing.location.city}, ${vehicleListing.location.stateCode}',
-              style: TextStyle(color: Colors.grey[600]),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

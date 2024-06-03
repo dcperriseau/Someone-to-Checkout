@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:someonetoview/main_app_bar.dart';
 import 'package:someonetoview/models/property_listing.dart';
-import 'package:someonetoview/pages/vehicles/vehicle_listing_widget.dart';
 import 'package:someonetoview/pages/booking/booking_details_page.dart';
 
 class PropertyDetailsPage extends ConsumerStatefulWidget {
@@ -29,40 +27,45 @@ class _PropertyDetailsPageState extends ConsumerState<PropertyDetailsPage> {
   }
 
   Widget mapWidget() {
-    return SizedBox(
-      height: MediaQuery.of(context).size.width / 5,
-      width: MediaQuery.of(context).size.width / 5,
-      child: FlutterMap(
-        options: MapOptions(
-          center: getCoords(),
-          zoom: 13,
-        ),
-        children: [
-          TileLayer(
-            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            userAgentPackageName: 'com.example.app',
-          ),
-          CircleLayer(
-            circles: [
-              CircleMarker(
-                point: getCoords(),
-                radius: 1750,
-                color: Colors.black38,
-                borderColor: Colors.black,
-                useRadiusInMeter: true,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double size = constraints.maxWidth < 600 ? 300 : 500;
+        return SizedBox(
+          height: size,
+          width: size,
+          child: FlutterMap(
+            options: MapOptions(
+              center: getCoords(),
+              zoom: 13,
+            ),
+            children: [
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'com.example.app',
+              ),
+              CircleLayer(
+                circles: [
+                  CircleMarker(
+                    point: getCoords(),
+                    radius: 1750,
+                    color: Colors.black38,
+                    borderColor: Colors.black,
+                    useRadiusInMeter: true,
+                  ),
+                ],
+              ),
+              RichAttributionWidget(
+                attributions: [
+                  TextSourceAttribution(
+                    'OpenStreetMap contributors',
+                    onTap: () {},
+                  ),
+                ],
               ),
             ],
           ),
-          RichAttributionWidget(
-            attributions: [
-              TextSourceAttribution(
-                'OpenStreetMap contributors',
-                onTap: () {},
-              ),
-            ],
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -92,31 +95,40 @@ class _PropertyDetailsPageState extends ConsumerState<PropertyDetailsPage> {
       ));
     }
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 600,
-          width: (MediaQuery.of(context).size.width / 2) - 150,
-          child: Image.network(
-            selectedImage == 0
-                ? widget.propertyListing.mainImageUrl
-                : widget.propertyListing.imageUrls[selectedImage],
-            fit: BoxFit.fitWidth,
-          ),
-        ),
-        SizedBox(width: 12),
-        SizedBox(
-          width: 100,
-          height: 600,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: images,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double height = constraints.maxWidth < 600 ? 300 : 600;
+        double width = constraints.maxWidth < 600
+            ? constraints.maxWidth - 50
+            : (constraints.maxWidth / 2) - 150;
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: height,
+              width: width,
+              child: Image.network(
+                selectedImage == 0
+                    ? widget.propertyListing.mainImageUrl
+                    : widget.propertyListing.imageUrls[selectedImage],
+                fit: BoxFit.fitWidth,
+              ),
             ),
-          ),
-        ),
-      ],
+            SizedBox(width: 12),
+            SizedBox(
+              width: 100,
+              height: height,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: images,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -284,60 +296,90 @@ class _PropertyDetailsPageState extends ConsumerState<PropertyDetailsPage> {
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.propertyListing.title,
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                      SizedBox(height: 12),
-                      Row(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                imageSection(),
-                                SizedBox(height: 12),
-                                Text(
-                                  widget.propertyListing.description,
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
-                                ),
-                              ],
-                            ),
+                          Text(
+                            widget.propertyListing.title,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(fontWeight: FontWeight.bold),
                           ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                          SizedBox(height: 12),
+                          constraints.maxWidth < 600
+                              ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    imageSection(),
+                                    SizedBox(height: 12),
+                                    Text(
+                                      widget.propertyListing.description,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
+                                    const SizedBox(height: 12),
                                     detailsSection(),
-                                    const SizedBox(width: 16),
+                                    const SizedBox(height: 12),
                                     mapWidget(),
+                                    const SizedBox(height: 16),
+                                    timesToViewWidget(),
+                                  ],
+                                )
+                              : Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          imageSection(),
+                                          SizedBox(height: 12),
+                                          Text(
+                                            widget.propertyListing.description,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              detailsSection(),
+                                              const SizedBox(width: 16),
+                                              mapWidget(),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 16),
+                                          timesToViewWidget(),
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
-                                const SizedBox(height: 16),
-                                timesToViewWidget(),
-                              ],
-                            ),
-                          ),
                         ],
-                      ),
-                    ],
+                      );
+                    },
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

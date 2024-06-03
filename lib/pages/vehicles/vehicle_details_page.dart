@@ -27,10 +27,10 @@ class _VehicleDetailsPageState extends ConsumerState<VehicleDetailsPage> {
     );
   }
 
-  Widget mapWidget() {
+  Widget mapWidget(double mapSize) {
     return SizedBox(
-      height: MediaQuery.of(context).size.width / 5,
-      width: MediaQuery.of(context).size.width / 5,
+      height: mapSize,
+      width: mapSize,
       child: FlutterMap(
         options: MapOptions(
           center: getCoords(),
@@ -65,7 +65,7 @@ class _VehicleDetailsPageState extends ConsumerState<VehicleDetailsPage> {
     );
   }
 
-  Widget imageSection() {
+  Widget imageSection(double imageHeight, double imageWidth) {
     List<Widget> images = [];
 
     int imageUrlLen = widget.vehicleListing.imageUrls.length;
@@ -95,8 +95,8 @@ class _VehicleDetailsPageState extends ConsumerState<VehicleDetailsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          height: 600,
-          width: (MediaQuery.of(context).size.width / 2) - 150,
+          height: imageHeight,
+          width: imageWidth,
           child: Image.network(
             selectedImage == 0
                 ? widget.vehicleListing.mainImageUrl
@@ -107,7 +107,7 @@ class _VehicleDetailsPageState extends ConsumerState<VehicleDetailsPage> {
         const SizedBox(width: 12),
         SizedBox(
           width: 100,
-          height: 600,
+          height: imageHeight,
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -133,105 +133,100 @@ class _VehicleDetailsPageState extends ConsumerState<VehicleDetailsPage> {
   }
 
   Widget detailsSection() {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Price: ${priceFormat(widget.vehicleListing.price)}',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            Text(
-              '${formatNumber(widget.vehicleListing.mileage)} Miles',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            Text(
-              'Listed by: ${widget.vehicleListing.username}',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Listed On: ${DateFormat.yMMMd('en_US').format(widget.vehicleListing.dateCreated)}',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            Text(
-              'Last Updated: ${DateFormat.yMMMd('en_US').format(widget.vehicleListing.lastUpdated)}',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const Divider(),
-            const SizedBox(height: 16),
-            FilledButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => BookingDetailsPage(
-                      amount: 2000,
-                      description: 'Send Someone To View This',
-                      availableTimes: widget.vehicleListing.availableTimes!,
-                    ),
-                  ),
-                );
-              },
-              style: FilledButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.black87,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(0),
-                  ),
-                ),
-              ),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Text(
-                  'Send Someone To View This',
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            FilledButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => BookingDetailsPage(
-                      amount: 2000,
-                      description: 'Have Someone Keep You Company',
-                      availableTimes: widget.vehicleListing.availableTimes!,
-                    ),
-                  ),
-                );
-              },
-              style: FilledButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.black87,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(0),
-                  ),
-                ),
-              ),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Center(
-                  child: Text(
-                    'Have Someone Keep You Company',
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          'Price: ${priceFormat(widget.vehicleListing.price)}',
+          style: Theme.of(context).textTheme.titleLarge,
         ),
-      ),
+        Text(
+          '${formatNumber(widget.vehicleListing.mileage)} Miles',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        Text(
+          'Listed by: ${widget.vehicleListing.username}',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'Listed On: ${DateFormat.yMMMd('en_US').format(widget.vehicleListing.dateCreated)}',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        Text(
+          'Last Updated: ${DateFormat.yMMMd('en_US').format(widget.vehicleListing.lastUpdated)}',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        const Divider(),
+        const SizedBox(height: 16),
+        FilledButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => BookingDetailsPage(
+                  amount: 2000,
+                  description: 'Send Someone To View This',
+                  availableTimes: widget.vehicleListing.availableTimes!,
+                ),
+              ),
+            );
+          },
+          style: FilledButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.black87,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(0),
+              ),
+            ),
+          ),
+          child: const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: Text(
+              'Send Someone To View This',
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        FilledButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => BookingDetailsPage(
+                  amount: 2000,
+                  description: 'Have Someone Keep You Company',
+                  availableTimes: widget.vehicleListing.availableTimes!,
+                ),
+              ),
+            );
+          },
+          style: FilledButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.black87,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(0),
+              ),
+            ),
+          ),
+          child: const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: Center(
+              child: Text(
+                'Have Someone Keep You Company',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -286,60 +281,102 @@ class _VehicleDetailsPageState extends ConsumerState<VehicleDetailsPage> {
             MainAppBar(route: ModalRoute.of(context)?.settings.name ?? ''),
             SliverFillRemaining(
               hasScrollBody: false,
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.vehicleListing.title,
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  bool isMobile = constraints.maxWidth < 600;
+                  double imageHeight = isMobile ? 300 : 600;
+                  double imageWidth = isMobile
+                      ? constraints.maxWidth - 32 // full width for mobile
+                      : (constraints.maxWidth / 2) - 150;
+
+                  double mapSize = isMobile
+                      ? constraints.maxWidth - 32 // full width for mobile
+                      : constraints.maxWidth / 5;
+
+                  return SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                imageSection(),
-                                const SizedBox(height: 12),
-                                Text(
-                                  widget.vehicleListing.description,
-                                  style: Theme.of(context).textTheme.titleMedium,
-                                ),
-                              ],
-                            ),
+                          Text(
+                            widget.vehicleListing.title,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(fontWeight: FontWeight.bold),
                           ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                          const SizedBox(height: 12),
+                          isMobile
+                              ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    imageSection(imageHeight, imageWidth),
+                                    const SizedBox(height: 12),
+                                    Text(
+                                      widget.vehicleListing.description,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
+                                    const SizedBox(height: 12),
                                     detailsSection(),
-                                    const SizedBox(width: 16),
-                                    mapWidget(),
+                                    const SizedBox(height: 12),
+                                    mapWidget(mapSize),
+                                    const SizedBox(height: 16),
+                                    timesToViewWidget(),
+                                  ],
+                                )
+                              : Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          imageSection(
+                                              imageHeight, imageWidth),
+                                          const SizedBox(height: 12),
+                                          Text(
+                                            widget.vehicleListing.description,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              detailsSection(),
+                                              const SizedBox(width: 16),
+                                              mapWidget(mapSize),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 16),
+                                          timesToViewWidget(),
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
-                                const SizedBox(height: 16),
-                                timesToViewWidget(),
-                              ],
-                            ),
-                          ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
             )
           ],

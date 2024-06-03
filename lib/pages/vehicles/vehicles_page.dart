@@ -5,7 +5,6 @@ import 'package:someonetoview/main_app_bar.dart';
 import 'package:someonetoview/pages/vehicles/vehicle_listing_widget.dart';
 import 'package:someonetoview/providers/vehicles_provider.dart';
 
-
 class VehiclesPage extends ConsumerStatefulWidget {
   const VehiclesPage({super.key});
 
@@ -19,8 +18,6 @@ class _VehiclesPageState extends ConsumerState<VehiclesPage> {
     final vehicleList = ref.watch(vehiclesProvider);
     final isLoading = vehicleList.isEmpty;
 
-    double width = MediaQuery.of(context).size.width;
-
     return SelectionArea(
       child: Scaffold(
         body: CustomScrollView(
@@ -33,14 +30,30 @@ class _VehiclesPageState extends ConsumerState<VehiclesPage> {
             else if (vehicleList.isNotEmpty)
               SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                sliver: SliverGrid.extent(
-                  maxCrossAxisExtent: width / 4,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 20,
-                  children: [
-                    for (final listing in vehicleList)
-                      VehicleListingWidget(vehicleListing: listing),
-                  ],
+                sliver: SliverToBoxAdapter(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isMobile = constraints.maxWidth < 600;
+                      final crossAxisCount = isMobile ? 2 : 4;
+                      final itemHeight = isMobile ? 250 : 400;
+                      final itemWidth = (constraints.maxWidth - (crossAxisCount - 1) * 12) / crossAxisCount;
+
+                      return GridView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: vehicleList.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 20,
+                          childAspectRatio: itemWidth / itemHeight,
+                        ),
+                        itemBuilder: (context, index) {
+                          return VehicleListingWidget(vehicleListing: vehicleList[index]);
+                        },
+                      );
+                    },
+                  ),
                 ),
               )
             else

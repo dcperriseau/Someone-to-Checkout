@@ -32,102 +32,152 @@ class _BookingDetailsPageState extends State<BookingDetailsPage> {
       appBar: AppBar(
         title: Text('Booking Details'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Name'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your name';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _name = value!;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Email'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _email = value!;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Phone Number'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your phone number';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _phoneNumber = value!;
-                },
-              ),
-              SizedBox(height: 16),
-              Text('Select a time:'),
-              DropdownButtonFormField<String>(
-                items: [
-                  for (final time in widget.availableTimes.toList())
-                    DropdownMenuItem(
-                      value: time,
-                      child: Text(time),
-                    )
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _selectedTime = value;
-                    _timeError = null;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please select a time';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  errorText: _timeError,
-                ),
-              ),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    if (_isValidTime(_selectedTime)) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => PaymentScreen(
-                            amount: widget.amount,
-                            currency: 'usd',
-                            description: widget.description,
-                          ),
-                        ),
-                      );
-                    } else {
-                      setState(() {
-                        _timeError = 'Selected time is not available. Please select a valid time slot.';
-                      });
-                    }
-                  }
-                },
-                child: Text('Confirm'),
-              ),
-            ],
-          ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: constraints.maxWidth < 600
+                  ? _buildMobileLayout()
+                  : _buildDesktopLayout(),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildMobileLayout() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          _buildFormFields(),
+          SizedBox(height: 16),
+          _buildTimeDropdown(),
+          SizedBox(height: 16),
+          _buildConfirmButton(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDesktopLayout() {
+    return Center(
+      child: SizedBox(
+        width: 600,
+        child: Column(
+          children: [
+            _buildFormFields(),
+            SizedBox(height: 16),
+            _buildTimeDropdown(),
+            SizedBox(height: 16),
+            _buildConfirmButton(),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget _buildFormFields() {
+    return Column(
+      children: [
+        TextFormField(
+          decoration: InputDecoration(labelText: 'Name'),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter your name';
+            }
+            return null;
+          },
+          onSaved: (value) {
+            _name = value!;
+          },
+        ),
+        TextFormField(
+          decoration: InputDecoration(labelText: 'Email'),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter your email';
+            }
+            return null;
+          },
+          onSaved: (value) {
+            _email = value!;
+          },
+        ),
+        TextFormField(
+          decoration: InputDecoration(labelText: 'Phone Number'),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter your phone number';
+            }
+            return null;
+          },
+          onSaved: (value) {
+            _phoneNumber = value!;
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTimeDropdown() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Select a time:'),
+        DropdownButtonFormField<String>(
+          items: [
+            for (final time in widget.availableTimes.toList())
+              DropdownMenuItem(
+                value: time,
+                child: Text(time),
+              )
+          ],
+          onChanged: (value) {
+            setState(() {
+              _selectedTime = value;
+              _timeError = null;
+            });
+          },
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please select a time';
+            }
+            return null;
+          },
+          decoration: InputDecoration(
+            errorText: _timeError,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildConfirmButton() {
+    return ElevatedButton(
+      onPressed: () {
+        if (_formKey.currentState!.validate()) {
+          _formKey.currentState!.save();
+          if (_isValidTime(_selectedTime)) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => PaymentScreen(
+                  amount: widget.amount,
+                  currency: 'usd',
+                  description: widget.description,
+                ),
+              ),
+            );
+          } else {
+            setState(() {
+              _timeError = 'Selected time is not available. Please select a valid time slot.';
+            });
+          }
+        }
+      },
+      child: Text('Confirm'),
     );
   }
 

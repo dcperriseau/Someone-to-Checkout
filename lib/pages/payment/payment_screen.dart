@@ -63,7 +63,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Payment successful, your booking is confirmed. You will recieve an email confirmation shortyly.')),
+        const SnackBar(content: Text('Payment successful, your booking is confirmed. You will receive an email confirmation shortly.')),
       );
 
       // Navigate or perform further actions
@@ -87,24 +87,29 @@ class _PaymentScreenState extends State<PaymentScreen> {
       appBar: AppBar(
         title: const Text('Payment'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            CardField(
-              onCardChanged: (card) {
-                // Handle card changes
-              },
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          double padding = constraints.maxWidth < 600 ? 16.0 : constraints.maxWidth * 0.2;
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: padding),
+            child: Column(
+              children: [
+                CardField(
+                  onCardChanged: (card) {
+                    // Handle card changes
+                  },
+                ),
+                const SizedBox(height: 20),
+                _isLoading
+                    ? const CircularProgressIndicator()
+                    : ElevatedButton(
+                        onPressed: _processPayment,
+                        child: const Text('Pay Now'),
+                      ),
+              ],
             ),
-            const SizedBox(height: 20),
-            _isLoading
-                ? const CircularProgressIndicator()
-                : ElevatedButton(
-                    onPressed: _processPayment,
-                    child: const Text('Pay Now'),
-                  ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

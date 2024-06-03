@@ -17,8 +17,6 @@ class _FurniturePageState extends ConsumerState<FurniturePage> {
     final furnitureList = ref.watch(furnitureProvider);
     final isLoading = furnitureList.isEmpty;
 
-    double width = MediaQuery.of(context).size.width;
-
     return SelectionArea(
       child: Scaffold(
         body: CustomScrollView(
@@ -31,14 +29,20 @@ class _FurniturePageState extends ConsumerState<FurniturePage> {
             else if (furnitureList.isNotEmpty)
               SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                sliver: SliverGrid.extent(
-                  maxCrossAxisExtent: width / 4,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 20,
-                  children: [
-                    for (final listing in furnitureList)
-                      FurnitureListingWidget(furnitureListing: listing),
-                  ],
+                sliver: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SliverGrid.extent(
+                      maxCrossAxisExtent: constraints.maxWidth < 600
+                          ? constraints.maxWidth / 2
+                          : constraints.maxWidth / 4,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 20,
+                      children: [
+                        for (final listing in furnitureList)
+                          FurnitureListingWidget(furnitureListing: listing),
+                      ],
+                    );
+                  },
                 ),
               )
             else

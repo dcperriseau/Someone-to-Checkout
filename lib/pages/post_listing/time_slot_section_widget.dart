@@ -46,78 +46,84 @@ class TimeSlotSectionState extends State<TimeSlotSection> {
   Widget build(BuildContext context) {
     timeOptions = _generateTimeOptions();
 
-    return Column(
-      children: [
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Checkbox(
-              value: checked,
-              onChanged: (value) {
-                if (value == null) return;
-                setState(() {
-                  checked = value;
-                  widget.dayValues[widget.day] = checked;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double spacing = constraints.maxWidth < 600 ? 8.0 : 12.0;
 
-                  if (!checked) {
-                    start = '';
-                    end = '';
-                    widget.onDayCheckChanged(widget.day);
-                  }
-                });
-              },
-            ),
-            Text(widget.day),
-            const SizedBox(width: 12),
-            Expanded(
-              child: DropdownButtonFormField(
-                decoration: const InputDecoration(
-                  label: Text('Start Time'),
+        return Column(
+          children: [
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Checkbox(
+                  value: checked,
+                  onChanged: (value) {
+                    if (value == null) return;
+                    setState(() {
+                      checked = value;
+                      widget.dayValues[widget.day] = checked;
+
+                      if (!checked) {
+                        start = '';
+                        end = '';
+                        widget.onDayCheckChanged(widget.day);
+                      }
+                    });
+                  },
                 ),
-                items: timeOptions
-                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                    .toList(),
-                value: start.isEmpty ? null : start,
-                onChanged: !checked
-                    ? null
-                    : (String? value) {
-                        if (value == null || value.isEmpty) return;
-                        setState(() {
-                          start = value;
-                        });
-                        widget.onTimeSlotChanged(widget.day, start, end);
-                      },
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              child: Text('to'),
-            ),
-            Expanded(
-              child: DropdownButtonFormField(
-                items: timeOptions
-                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                    .toList(),
-                value: end.isEmpty ? null : end,
-                onChanged: !checked
-                    ? null
-                    : (String? value) {
-                        if (value == null || value.isEmpty) return;
-                        setState(() {
-                          end = value;
-                        });
-                        widget.onTimeSlotChanged(widget.day, start, end);
-                      },
-                decoration: const InputDecoration(
-                  label: Text('End Time'),
+                Text(widget.day),
+                SizedBox(width: spacing),
+                Expanded(
+                  child: DropdownButtonFormField(
+                    decoration: const InputDecoration(
+                      label: Text('Start Time'),
+                    ),
+                    items: timeOptions
+                        .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                        .toList(),
+                    value: start.isEmpty ? null : start,
+                    onChanged: !checked
+                        ? null
+                        : (String? value) {
+                            if (value == null || value.isEmpty) return;
+                            setState(() {
+                              start = value;
+                            });
+                            widget.onTimeSlotChanged(widget.day, start, end);
+                          },
+                  ),
                 ),
-              ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: spacing),
+                  child: Text('to'),
+                ),
+                Expanded(
+                  child: DropdownButtonFormField(
+                    items: timeOptions
+                        .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                        .toList(),
+                    value: end.isEmpty ? null : end,
+                    onChanged: !checked
+                        ? null
+                        : (String? value) {
+                            if (value == null || value.isEmpty) return;
+                            setState(() {
+                              end = value;
+                            });
+                            widget.onTimeSlotChanged(widget.day, start, end);
+                          },
+                    decoration: const InputDecoration(
+                      label: Text('End Time'),
+                    ),
+                  ),
+                ),
+              ],
             ),
+            const SizedBox(height: 12),
+            const Divider(thickness: 0.5),
           ],
-        ),
-        const SizedBox(height: 12),
-        const Divider(thickness: 0.5),
-      ],
+        );
+      },
     );
   }
 }
