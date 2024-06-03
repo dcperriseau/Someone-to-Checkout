@@ -11,7 +11,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # Other dependencies...
   cupertino_icons: ^1.0.6
   uuid: ^4.4.0
@@ -22,10 +21,10 @@ dependencies:
   intl: ^0.19.0
   flutter_riverpod: ^2.5.1
   flutter_stripe: ^10.1.1
-  firebase_core: ^2.32.0 
+  firebase_core: ^2.32.0
   cloud_firestore: ^4.17.5
   cloud_functions: ^4.7.6
-  intl: ^0.17.0
+  # intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
@@ -56,4 +55,3 @@ flutter:
       fonts:
         - asset: assets/fonts/OpenSans-VariableFont_wdth,wght.ttf
         - asset: assets/fonts/OpenSans-Italic-VariableFont_wdth,wght.ttf
-
