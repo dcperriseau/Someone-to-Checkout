@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:someonetoview/constants.dart';
-import 'package:someonetoview/main.dart';
+import 'main.dart';
 
 final customTheme = ThemeData(
   brightness: Brightness.light,

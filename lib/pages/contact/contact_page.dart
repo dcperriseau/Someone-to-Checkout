@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 class ContactPage extends StatelessWidget {
   const ContactPage({super.key});
 
-  final String email = 'dylanwain@me.com';
+  final String email = 'dylanwain@localviewers.com';
   final String phone = '859-519-8911';
 
   @override

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:someonetoview/generators.dart';
+
 import 'package:someonetoview/main_app_bar.dart';
 import 'package:someonetoview/pages/vehicles/vehicle_listing_widget.dart';
 import 'package:someonetoview/providers/vehicles_provider.dart';

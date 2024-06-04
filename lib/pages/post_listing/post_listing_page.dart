@@ -14,7 +14,8 @@ import 'package:someonetoview/providers/property_provider.dart';
 import 'package:someonetoview/providers/vehicles_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:someonetoview/firestore_service.dart'; // Import the FirestoreService
-
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 
 class PostListingPage extends ConsumerStatefulWidget {
   const PostListingPage({super.key});
@@ -43,6 +44,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
   final emailController = TextEditingController();
 
   String selectedPropertyType = '';
+  List<File> selectedImages = [];
 
   final availableTimes = AvailableTimes(
     sunday: 'none',
@@ -116,6 +118,19 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
     }
   }
 
+  Future<void> _pickImage() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.image,
+    );
+
+    if (result != null) {
+      setState(() {
+        selectedImages = result.paths.map((path) => File(path!)).toList();
+      });
+    }
+  }
+
   Future<void> _uploadPost(String type) async {
     final firestoreService = FirestoreService();
     Map<String, dynamic> postData;
@@ -140,6 +155,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
         'bathroomCount': int.tryParse(bathroomController.text) ?? 0,
         'availableTimes': availableTimes.toMap(),
         'type': 'property',
+        'imageUrls': [], // Placeholder for image URLs
       };
     } else if (type == 'vehicle') {
       postData = {
@@ -160,6 +176,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
         'description': descriptionController.text,
         'availableTimes': availableTimes.toMap(),
         'type': 'vehicle',
+        'imageUrls': [], // Placeholder for image URLs
       };
     } else {
       postData = {
@@ -180,6 +197,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
         'description': descriptionController.text,
         'availableTimes': availableTimes.toMap(),
         'type': 'furniture',
+        'imageUrls': [], // Placeholder for image URLs
       };
     }
 
@@ -213,6 +231,18 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
     );
   }
 
+  Widget _buildImagePreview() {
+    return selectedImages.isEmpty
+        ? const SizedBox.shrink()
+        : Wrap(
+            spacing: 8.0,
+            runSpacing: 8.0,
+            children: selectedImages
+                .map((image) => Image.file(image, width: 100, height: 100))
+                .toList(),
+          );
+  }
+
   Widget propertyForm(double screenWidth) {
     List<String> propertyTypes = [
       'Home',
@@ -229,7 +259,9 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
           key: _propertyFormKey,
           child: LayoutBuilder(
             builder: (context, constraints) {
-              double formWidth = constraints.maxWidth < 600 ? constraints.maxWidth * 0.9 : screenWidth / 3;
+              double formWidth = constraints.maxWidth < 600
+                  ? constraints.maxWidth * 0.9
+                  : screenWidth / 3;
               return SizedBox(
                 width: formWidth,
                 child: Column(
@@ -261,7 +293,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
                     ),
                     gap,
                     GestureDetector(
-                      onTap: () {},
+                      onTap: _pickImage,
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.grey[300],
@@ -275,9 +307,10 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
                           children: [
                             Text(
                               'Add Property Photos',
-                              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 4),
                             const Icon(Icons.add_photo_alternate),
@@ -285,6 +318,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
                         ),
                       ),
                     ),
+                    _buildImagePreview(),
                     gap,
                     const Text('Property Type'),
                     DropdownButtonFormField(
@@ -480,7 +514,9 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
           key: _vehicleFormKey,
           child: LayoutBuilder(
             builder: (context, constraints) {
-              double formWidth = constraints.maxWidth < 600 ? constraints.maxWidth * 0.9 : screenWidth / 3;
+              double formWidth = constraints.maxWidth < 600
+                  ? constraints.maxWidth * 0.9
+                  : screenWidth / 3;
               return SizedBox(
                 width: formWidth,
                 child: Column(
@@ -512,7 +548,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
                     ),
                     gap,
                     GestureDetector(
-                      onTap: () {},
+                      onTap: _pickImage,
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.grey[300],
@@ -526,9 +562,10 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
                           children: [
                             Text(
                               'Add Vehicle Photos',
-                              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 4),
                             const Icon(Icons.add_photo_alternate),
@@ -536,6 +573,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
                         ),
                       ),
                     ),
+                    _buildImagePreview(),
                     gap,
                     TextFormField(
                       controller: titleController,
@@ -700,7 +738,9 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
           key: _furnitureFormKey,
           child: LayoutBuilder(
             builder: (context, constraints) {
-              double formWidth = constraints.maxWidth < 600 ? constraints.maxWidth * 0.9 : screenWidth / 3;
+              double formWidth = constraints.maxWidth < 600
+                  ? constraints.maxWidth * 0.9
+                  : screenWidth / 3;
               return SizedBox(
                 width: formWidth,
                 child: Column(
@@ -732,7 +772,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
                     ),
                     gap,
                     GestureDetector(
-                      onTap: () {},
+                      onTap: _pickImage,
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.grey[300],
@@ -746,9 +786,10 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
                           children: [
                             Text(
                               'Add Furniture Photos',
-                              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 4),
                             const Icon(Icons.add_photo_alternate),
@@ -756,6 +797,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
                         ),
                       ),
                     ),
+                    _buildImagePreview(),
                     gap,
                     TextFormField(
                       controller: titleController,
