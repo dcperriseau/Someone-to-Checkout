@@ -1,6 +1,6 @@
 # someonetoview
 
-A new Flutter project.
+Flutter web build for Local Viewers
 
 ## Getting Started
 
