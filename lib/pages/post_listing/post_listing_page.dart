@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:someonetoview/constants.dart';
 import 'package:someonetoview/main_app_bar.dart';
 import 'package:someonetoview/models/available_times.dart';
@@ -39,6 +40,9 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
   final descriptionController = TextEditingController();
 
   String selectedPropertyType = '';
+  List<String> propertyImages = [];
+  List<String> vehicleImages = [];
+  List<String> furnitureImages = [];
 
   final availableTimes = AvailableTimes(
     sunday: 'none',
@@ -112,6 +116,89 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
     }
   }
 
+  Future<void> _pickImages(String type) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: true,
+    );
+
+    if (result != null) {
+      List<String> paths = result.paths.map((path) => path!).toList();
+      setState(() {
+        if (type == 'property') {
+          propertyImages.addAll(paths);
+        } else if (type == 'vehicle') {
+          vehicleImages.addAll(paths);
+        } else if (type == 'furniture') {
+          furnitureImages.addAll(paths);
+        }
+      });
+    }
+  }
+
+  Widget _buildImagePickerContainer(String type) {
+    List<String> images;
+    String label;
+    if (type == 'property') {
+      images = propertyImages;
+      label = 'Add Property Photos';
+    } else if (type == 'vehicle') {
+      images = vehicleImages;
+      label = 'Add Vehicle Photos';
+    } else {
+      images = furnitureImages;
+      label = 'Add Furniture Photos';
+    }
+
+    return GestureDetector(
+      onTap: () => _pickImages(type),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        height: 150,
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              label,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 4),
+            const Icon(Icons.add_photo_alternate),
+            if (images.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: SizedBox(
+                  height: 100,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: images.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.network(
+                          images[index],
+                          fit: BoxFit.cover,
+                          width: 100,
+                          height: 100,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget timesAvailableSection() {
     List<String> days = dayValues.keys.toList();
 
@@ -159,32 +246,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    height: screenWidth / 3,
-                    width: screenWidth / 3,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Add Property Photos',
-                          style:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                        const SizedBox(height: 4),
-                        const Icon(Icons.add_photo_alternate),
-                      ],
-                    ),
-                  ),
-                ),
+                _buildImagePickerContainer('property'),
                 gap,
                 const Text('Property Type'),
                 DropdownButtonFormField(
@@ -368,13 +430,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
                         bedroomCount: int.tryParse(bedroomController.text) ?? 0,
                         bathroomCount:
                             int.tryParse(bathroomController.text) ?? 0,
-                        imageUrls: [
-                          'https://picsum.photos/id/10/300/300',
-                          'https://picsum.photos/id/11/300/300',
-                          'https://picsum.photos/id/12/300/300',
-                          'https://picsum.photos/id/13/300/300',
-                          'https://picsum.photos/id/14/300/300',
-                        ],
+                        imageUrls: propertyImages,
                         availableTimes: availableTimes,
                       );
 
@@ -417,32 +473,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    height: screenWidth / 3,
-                    width: screenWidth / 3,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Add Vehicle Photos',
-                          style:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                        const SizedBox(height: 4),
-                        const Icon(Icons.add_photo_alternate),
-                      ],
-                    ),
-                  ),
-                ),
+                _buildImagePickerContainer('vehicle'),
                 gap,
                 TextFormField(
                   controller: titleController,
@@ -592,13 +623,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
                           zipCode: int.tryParse(zipCodeController.text) ?? 0,
                         ),
                         description: descriptionController.text,
-                        imageUrls: [
-                          'https://picsum.photos/id/10/300/300',
-                          'https://picsum.photos/id/11/300/300',
-                          'https://picsum.photos/id/12/300/300',
-                          'https://picsum.photos/id/13/300/300',
-                          'https://picsum.photos/id/14/300/300',
-                        ],
+                        imageUrls: vehicleImages,
                         availableTimes: availableTimes,
                       );
 
@@ -641,32 +666,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    height: screenWidth / 3,
-                    width: screenWidth / 3,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Add Furniture Photos',
-                          style:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                        const SizedBox(height: 4),
-                        const Icon(Icons.add_photo_alternate),
-                      ],
-                    ),
-                  ),
-                ),
+                _buildImagePickerContainer('furniture'),
                 gap,
                 TextFormField(
                   controller: titleController,
@@ -811,13 +811,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
                           zipCode: int.tryParse(zipCodeController.text) ?? 0,
                         ),
                         description: descriptionController.text,
-                        imageUrls: [
-                          'https://picsum.photos/id/10/300/300',
-                          'https://picsum.photos/id/11/300/300',
-                          'https://picsum.photos/id/12/300/300',
-                          'https://picsum.photos/id/13/300/300',
-                          'https://picsum.photos/id/14/300/300',
-                        ],
+                        imageUrls: furnitureImages,
                         availableTimes: availableTimes,
                       );
 
