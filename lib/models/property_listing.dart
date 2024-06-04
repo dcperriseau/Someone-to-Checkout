@@ -6,6 +6,7 @@ import 'package:someonetoview/models/location.dart';
 class PropertyListing {
   final String id;
   final String username;
+  final String userEmail;
   final DateTime dateCreated;
   final DateTime lastUpdated;
   final String mainImageUrl;
@@ -21,6 +22,7 @@ class PropertyListing {
   PropertyListing({
     required this.id,
     required this.username,
+    required this.userEmail,
     required this.dateCreated,
     required this.lastUpdated,
     required this.mainImageUrl,
@@ -38,6 +40,7 @@ class PropertyListing {
     String? id,
     String? username,
     DateTime? dateCreated,
+    String? userEmail,
     DateTime? lastUpdated,
     String? mainImageUrl,
     String? title,
@@ -52,6 +55,7 @@ class PropertyListing {
       PropertyListing(
         id: id ?? this.id,
         username: username ?? this.username,
+        userEmail: userEmail ?? this.userEmail,
         dateCreated: dateCreated ?? this.dateCreated,
         lastUpdated: lastUpdated ?? this.lastUpdated,
         mainImageUrl: mainImageUrl ?? this.mainImageUrl,
@@ -65,16 +69,16 @@ class PropertyListing {
         availableTimes: availableTimes ?? this.availableTimes,
       );
 
-  factory PropertyListing.fromJson(String str) =>
-      PropertyListing.fromMap(json.decode(str));
+  factory PropertyListing.fromJson(String str) => PropertyListing.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
   factory PropertyListing.fromMap(Map<String, dynamic> json) => PropertyListing(
         id: json['id'],
         username: json['username'],
+        userEmail: json['userEmail'],
         dateCreated: DateTime.parse(json['date_created']),
-        lastUpdated: DateTime.parse(json['date_created']),
+        lastUpdated: DateTime.parse(json['last_updated']),
         mainImageUrl: json['main_image_url'],
         title: json['title'],
         price: json['price'],
@@ -83,6 +87,9 @@ class PropertyListing {
         bedroomCount: json['bedroom_count'],
         bathroomCount: json['bathroom_count'],
         imageUrls: List<String>.from(json['image_urls'].map((x) => x)),
+        availableTimes: json['available_times'] != null
+            ? AvailableTimes.fromJson(json['available_times'])
+            : null,
       );
 
   Map<String, dynamic> toMap() => {

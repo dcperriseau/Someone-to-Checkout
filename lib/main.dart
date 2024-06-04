@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:someonetoview/models/furniture_listing.dart';
 import 'package:someonetoview/models/property_listing.dart';
 import 'package:someonetoview/models/vehicle_listing.dart';
@@ -15,9 +17,19 @@ import 'package:someonetoview/constants.dart';
 import 'package:someonetoview/pages/vehicles/vehicle_details_page.dart';
 import 'package:someonetoview/pages/vehicles/vehicles_page.dart';
 import 'package:someonetoview/theme.dart';
+import 'package:someonetoview/pages/payment/payment_screen.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); 
   usePathUrlStrategy();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const ProviderScope(child: App()));
+
+  // Initialize Stripe with your publishable key
+  Stripe.publishableKey = 'pk_live_51PKNI2GDWcOLiYf2JXRspBmODIUpsTVcRez14ZzJy0sJYHqU78eLYybiZmClaQXea0tRlfiP99HRCJy9xzy7YcDQ00LGExfvhF'; //Stripe publishable key
   runApp(const ProviderScope(child: App()));
 }
 
@@ -32,7 +44,7 @@ class NoTransitionsBuilder extends PageTransitionsBuilder {
     Animation<double> secondaryAnimation,
     Widget? child,
   ) {
-    // only return the child without warping it with animations
+    // Only return the child without wrapping it with animations
     return child!;
   }
 }
@@ -50,7 +62,6 @@ class App extends StatelessWidget {
         propertyRoute: (context) => const PropertyPage(),
         vehiclesRoute: (context) => const VehiclesPage(),
         furnitureRoute: (context) => const FurniturePage(),
-        // furnitureDetailRoute: (context) => const FurnitureDetailsPage(),
         aboutRoute: (context) => const AboutPage(),
         postListingRoute: (context) => const PostListingPage(),
         contactRoute: (context) => const ContactPage(),
@@ -100,7 +111,7 @@ class App extends StatelessWidget {
             );
         }
       },
-      title: websiteTitle,
+      title: 'someonetoview',
     );
   }
 }

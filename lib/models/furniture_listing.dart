@@ -1,11 +1,11 @@
 import 'dart:convert';
-
 import 'package:someonetoview/models/available_times.dart';
 import 'package:someonetoview/models/location.dart';
 
 class FurnitureListing {
   final String id;
   final String username;
+  final String userEmail;
   final DateTime dateCreated;
   final DateTime lastUpdated;
   final String mainImageUrl;
@@ -20,6 +20,7 @@ class FurnitureListing {
   FurnitureListing({
     required this.id,
     required this.username,
+    required this.userEmail,
     required this.dateCreated,
     required this.lastUpdated,
     required this.mainImageUrl,
@@ -35,6 +36,7 @@ class FurnitureListing {
   FurnitureListing copyWith({
     String? id,
     String? username,
+    String? userEmail,
     DateTime? dateCreated,
     DateTime? lastUpdated,
     String? mainImageUrl,
@@ -49,6 +51,7 @@ class FurnitureListing {
       FurnitureListing(
         id: id ?? this.id,
         username: username ?? this.username,
+        userEmail: userEmail ?? this.userEmail,
         dateCreated: dateCreated ?? this.dateCreated,
         lastUpdated: lastUpdated ?? this.lastUpdated,
         mainImageUrl: mainImageUrl ?? this.mainImageUrl,
@@ -61,17 +64,16 @@ class FurnitureListing {
         availableTimes: availableTimes ?? this.availableTimes,
       );
 
-  factory FurnitureListing.fromJson(String str) =>
-      FurnitureListing.fromMap(json.decode(str));
+  factory FurnitureListing.fromJson(Map<String, dynamic> json) => FurnitureListing.fromMap(json);
 
   String toJson() => json.encode(toMap());
 
-  factory FurnitureListing.fromMap(Map<String, dynamic> json) =>
-      FurnitureListing(
+  factory FurnitureListing.fromMap(Map<String, dynamic> json) => FurnitureListing(
         id: json['id'],
         username: json['username'],
+        userEmail: json['userEmail'],
         dateCreated: DateTime.parse(json['date_created']),
-        lastUpdated: DateTime.parse(json['date_created']),
+        lastUpdated: DateTime.parse(json['last_updated']),
         mainImageUrl: json['main_image_url'],
         title: json['title'],
         price: json['price'],
@@ -79,7 +81,7 @@ class FurnitureListing {
         description: json['description'],
         condition: json['condition'],
         imageUrls: List<String>.from(json['image_urls'].map((x) => x)),
-        availableTimes: AvailableTimes.fromJson(json['available_times']),
+        availableTimes: json['available_times'] != null ? AvailableTimes.fromJson(json['available_times']) : null,
       );
 
   Map<String, dynamic> toMap() => {
@@ -93,7 +95,7 @@ class FurnitureListing {
         'location': location.toMap(),
         'description': description,
         'condition': condition,
-        'image_urls': List<String>.from(imageUrls.map((x) => x)),
+        'image_urls': List<dynamic>.from(imageUrls.map((x) => x)),
         'available_times': availableTimes?.toMap(),
       };
 }

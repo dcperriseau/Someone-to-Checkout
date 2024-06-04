@@ -48,6 +48,7 @@ class Generator {
       PropertyListing listing = PropertyListing(
         id: const Uuid().v4(),
         username: 'Fake User',
+        userEmail: 'fakeUser@gmail.com',
         dateCreated: DateTime.now().subtract(const Duration(days: 4)),
         lastUpdated: DateTime.now().subtract(const Duration(hours: 36)),
         mainImageUrl: 'https://picsum.photos/id/$imageIndex/300',
@@ -117,6 +118,7 @@ class Generator {
       FurnitureListing listing = FurnitureListing(
         id: const Uuid().v4(),
         username: 'Fake User',
+        userEmail: 'fakeUser@gamil.com',
         dateCreated: DateTime.now().subtract(const Duration(days: 4)),
         lastUpdated: DateTime.now().subtract(const Duration(hours: 36)),
         mainImageUrl: 'https://picsum.photos/id/$imageIndex/300',
@@ -183,6 +185,7 @@ class Generator {
       VehicleListing listing = VehicleListing(
         id: const Uuid().v4(),
         username: 'Fake User',
+        userEmail: 'fakeUser@gamil.com',
         dateCreated: DateTime.now().subtract(const Duration(days: 4)),
         lastUpdated: DateTime.now().subtract(const Duration(hours: 36)),
         mainImageUrl: 'https://picsum.photos/id/$imageIndex/300',
@@ -209,3 +212,4 @@ class Generator {
     return listings;
   }
 }
+

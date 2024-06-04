@@ -43,8 +43,8 @@ class Location {
   String toJson() => json.encode(toMap());
 
   factory Location.fromMap(Map<String, dynamic> json) => Location(
-        longitude: json['longitude']?.toDouble(),
-        latitude: json['latitude']?.toDouble(),
+        longitude: (json['longitude'] as num).toDouble(),
+        latitude: (json['latitude'] as num).toDouble(),
         streetAddress: json['street_address'],
         city: json['city'],
         stateCode: json['state_code'],

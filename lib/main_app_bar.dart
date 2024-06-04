@@ -48,17 +48,12 @@ class MainAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       automaticallyImplyLeading: false,
-      title: GestureDetector(
-        onTap: () {
-          Navigator.of(context).pushNamed(propertyRoute);
-        },
-        child: Text(
-          websiteTitle,
-          style: Theme.of(context)
-              .textTheme
-              .headlineMedium!
-              .copyWith(fontWeight: FontWeight.bold, color: Colors.black87),
-        ),
+      title: Text(
+        'Someone To View',
+        style: Theme.of(context)
+            .textTheme
+            .headlineMedium!
+            .copyWith(fontWeight: FontWeight.bold, color: Colors.black87),
       ),
       pinned: true,
       scrolledUnderElevation: 0,

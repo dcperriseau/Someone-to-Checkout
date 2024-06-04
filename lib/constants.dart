@@ -9,8 +9,6 @@ const String aboutRoute = '/about';
 const String postListingRoute = '/post';
 const String contactRoute = '/contact';
 
-const String websiteTitle = 'Someone To Checkout';
-
 // Fonts
 const robotoFont = 'Roboto';
 const openSansFont = 'Open Sans';

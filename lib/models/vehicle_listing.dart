@@ -6,6 +6,7 @@ import 'package:someonetoview/models/location.dart';
 class VehicleListing {
   final String id;
   final String username;
+  final String userEmail;
   final DateTime dateCreated;
   final DateTime lastUpdated;
   final String mainImageUrl;
@@ -20,6 +21,7 @@ class VehicleListing {
   VehicleListing({
     required this.id,
     required this.username,
+    required this.userEmail,
     required this.dateCreated,
     required this.lastUpdated,
     required this.mainImageUrl,
@@ -35,6 +37,7 @@ class VehicleListing {
   VehicleListing copyWith({
     String? id,
     String? username,
+    String? userEmail,
     DateTime? dateCreated,
     DateTime? lastUpdated,
     String? mainImageUrl,
@@ -44,10 +47,12 @@ class VehicleListing {
     String? description,
     int? mileage,
     List<String>? imageUrls,
+    AvailableTimes? availableTimes,
   }) =>
       VehicleListing(
         id: id ?? this.id,
         username: username ?? this.username,
+        userEmail: userEmail ?? this.userEmail,
         dateCreated: dateCreated ?? this.dateCreated,
         lastUpdated: lastUpdated ?? this.lastUpdated,
         mainImageUrl: mainImageUrl ?? this.mainImageUrl,
@@ -57,6 +62,7 @@ class VehicleListing {
         description: description ?? this.description,
         mileage: mileage ?? this.mileage,
         imageUrls: imageUrls ?? this.imageUrls,
+        availableTimes: availableTimes ?? this.availableTimes,
       );
 
   factory VehicleListing.fromJson(String str) =>
@@ -67,8 +73,9 @@ class VehicleListing {
   factory VehicleListing.fromMap(Map<String, dynamic> json) => VehicleListing(
         id: json['id'],
         username: json['username'],
+        userEmail: json['userEmail'],
         dateCreated: DateTime.parse(json['date_created']),
-        lastUpdated: DateTime.parse(json['date_created']),
+        lastUpdated: DateTime.parse(json['last_updated']),
         mainImageUrl: json['main_image_url'],
         title: json['title'],
         price: json['price'],
@@ -76,10 +83,16 @@ class VehicleListing {
         description: json['description'],
         mileage: json['mileage'],
         imageUrls: List<String>.from(json['image_urls'].map((x) => x)),
+        availableTimes: json['available_times'] != null
+            ? AvailableTimes.fromJson(json['available_times'])
+            : null,
       );
 
   Map<String, dynamic> toMap() => {
         'id': id,
+        'username': username,
+        'date_created': dateCreated.toIso8601String(),
+        'last_updated': lastUpdated.toIso8601String(),
         'main_image_url': mainImageUrl,
         'title': title,
         'price': price,
