@@ -43,7 +43,7 @@ class AboutPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-            'Welcome to Someone To View!\n',
+            'Welcome to Someone To Checkout!\n',
             style: Theme.of(context).textTheme.displayMedium!.copyWith(
                   color: Colors.black87,
                 ),
@@ -90,7 +90,7 @@ class AboutPage extends StatelessWidget {
   List<Widget> _buildTextContent(BuildContext context) {
     return [
       Text(
-        'At Someone To View, we believe that finding your perfect space or dream vehicle should be effortless and stress-free. That\'s why we\'ve revolutionized the way you explore properties, vehicles, and furniture.\n',
+        'At Someone To Checkout, we believe that finding your perfect space or dream vehicle should be effortless and stress-free. That\'s why we\'ve revolutionized the way you explore properties, vehicles, and furniture.\n',
         style: Theme.of(context).textTheme.titleLarge,
       ),
       Text(
