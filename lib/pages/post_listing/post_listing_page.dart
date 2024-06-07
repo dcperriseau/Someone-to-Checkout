@@ -116,7 +116,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
     }
   }
 
-  Future<void> _pickImages(String type) async {
+  Future<void> _pickPropertyImages() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.image,
       allowMultiple: true,
@@ -125,75 +125,29 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
     if (result != null) {
       List<String> paths = result.paths.map((path) => path!).toList();
       setState(() {
-        if (type == 'property') {
-          propertyImages.addAll(paths);
-        } else if (type == 'vehicle') {
-          vehicleImages.addAll(paths);
-        } else if (type == 'furniture') {
-          furnitureImages.addAll(paths);
-        }
+        propertyImages.addAll(paths);
       });
     }
   }
 
-  Widget _buildImagePickerContainer(String type) {
-    List<String> images;
-    String label;
-    if (type == 'property') {
-      images = propertyImages;
-      label = 'Add Property Photos';
-    } else if (type == 'vehicle') {
-      images = vehicleImages;
-      label = 'Add Vehicle Photos';
-    } else {
-      images = furnitureImages;
-      label = 'Add Furniture Photos';
-    }
-
+  Widget _buildSimpleImagePickerBox() {
     return GestureDetector(
-      onTap: () => _pickImages(type),
+      onTap: _pickPropertyImages,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(12.0),
+          borderRadius: BorderRadius.circular(8.0),
         ),
-        height: 150,
+        height: 100,
         width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              label,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium!
-                  .copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 4),
-            const Icon(Icons.add_photo_alternate),
-            if (images.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: SizedBox(
-                  height: 100,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: images.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.network(
-                          images[index],
-                          fit: BoxFit.cover,
-                          width: 100,
-                          height: 100,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-          ],
+        child: Center(
+          child: Text(
+            'Add Photos',
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(fontWeight: FontWeight.bold),
+          ),
         ),
       ),
     );
@@ -246,7 +200,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                _buildImagePickerContainer('property'),
+                _buildSimpleImagePickerBox(),
                 gap,
                 const Text('Property Type'),
                 DropdownButtonFormField(
@@ -295,7 +249,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
                   controller: bathroomController,
                   cursorHeight: 16,
                   decoration: const InputDecoration(
-                    label: Text('Number of Bedrooms'),
+                    label: Text('Number of Bathrooms'),
                   ),
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(
@@ -473,7 +427,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                _buildImagePickerContainer('vehicle'),
+                _buildSimpleImagePickerBox(),
                 gap,
                 TextFormField(
                   controller: titleController,
@@ -666,7 +620,7 @@ class _PostListingPageState extends ConsumerState<PostListingPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                _buildImagePickerContainer('furniture'),
+                _buildSimpleImagePickerBox(),
                 gap,
                 TextFormField(
                   controller: titleController,

@@ -1,0 +1,147 @@
+[
+    {
+      "keyword": "San Diego, Dorado",
+      "image_url": "https://photos.zillowstatic.com/fp/e63a3e40fc2dd69f786dd3df4f5e9063-p_e.jpg",
+      "house_url": "https://www.zillow.com/apartments/san-diego-ca/dorado/5XnzMC/",
+      "price": "$1,995+",
+      "bedroom_s_": "1",
+      "bathroom_s_": "1",
+      "square_feet": "700",
+      "status": "Dorado",
+      "address": "4173 36th St, San Diego, CA",
+      "listing_by": "Dorado Realty"
+    },
+    {
+      "keyword": "San Diego, Apartment for rent",
+      "image_url": "https://photos.zillowstatic.com/fp/fbac505bb7f6d735f302269c6cd1ac9e-p_e.jpg",
+      "house_url": "https://www.zillow.com/apartments/san-diego-ca/the-evelyn/9MmBdF/",
+      "price": "$4,595/mo",
+      "bedroom_s_": "3",
+      "bathroom_s_": "2",
+      "square_feet": "1399",
+      "status": "Apartment for rent",
+      "address": "The Evelyn, 2129 El Cajon Blvd APT 3, San Diego, CA 92104",
+      "listing_by": "The Evelyn Realty"
+    },
+    {
+      "keyword": "San Diego, Point Loma Palms",
+      "image_url": "https://photos.zillowstatic.com/fp/9d28700536a10a0201d43459a1e52e79-p_e.jpg",
+      "house_url": "https://www.zillow.com/apartments/san-diego-ca/one-bedroom-in-the-heart-of-point-loma.-designer-finishes,-in.dash.home-w-d,-walk-in-closets,-%26-privat.../5YyBCH/",
+      "price": "$2,395+",
+      "bedroom_s_": "1",
+      "bathroom_s_": "1",
+      "square_feet": "750",
+      "status": "Point Loma Palms - $1,500 OFF 1ST MONTH'S RENT Renovated 1 bed with washer/dryer, new appliance, ...",
+      "address": "3152 Kemper St, San Diego, CA",
+      "listing_by": "Point Loma Realty"
+    },
+    {
+      "keyword": "San Diego, The Noble",
+      "image_url": "https://photos.zillowstatic.com/fp/d524958409752f74280bdc5146243be1-p_e.jpg",
+      "house_url": "https://www.zillow.com/apartments/san-diego-ca/the-noble-.dash.-golden-hill-community-featuring-in.dash.unit-washer-dryer-is-now-leasing%21-%241,500-off-your-.../9MkzKR/",
+      "price": "$2,515+",
+      "bedroom_s_": "1",
+      "bathroom_s_": "1",
+      "square_feet": "725",
+      "status": "The Noble - Golden Hill community featuring in-unit washer/dryer is now leasing! $1,500 off your ...",
+      "address": "2420 B St, San Diego, CA",
+      "listing_by": "The Noble Realty"
+    },
+    {
+      "keyword": "San Diego, Costa Verde Village",
+      "image_url": "https://photos.zillowstatic.com/fp/50206f0a7a6e2addefd5d6d8f4da0cb5-p_e.jpg",
+      "house_url": "https://www.zillow.com/apartments/san-diego-ca/costa-verde-village/5XjTfz/",
+      "price": "$2,610+",
+      "bedroom_s_": "1",
+      "bathroom_s_": "1",
+      "square_feet": "800",
+      "status": "Costa Verde Village",
+      "address": "8720 Costa Verde Blvd, San Diego, CA",
+      "listing_by": "Costa Verde Realty"
+    },
+    {
+      "keyword": "San Diego, AVA Pacific Beach",
+      "image_url": "https://photos.zillowstatic.com/fp/bb8f83ea3fbc199e79b761a2337f7692-p_e.jpg",
+      "house_url": "https://www.zillow.com/apartments/san-diego-ca/ava-pacific-beach/5Xk5qY/",
+      "price": "$2,203+",
+      "bedroom_s_": "0",
+      "bathroom_s_": "1",
+      "square_feet": "600",
+      "status": "AVA Pacific Beach",
+      "address": "3883 Ingraham St, San Diego, CA",
+      "listing_by": "AVA Realty"
+    },
+    {
+      "keyword": "San Diego, Asano on Ivy",
+      "image_url": "https://photos.zillowstatic.com/fp/30cddd4f411915ec2ccff9ceeb0fb9f8-p_e.jpg",
+      "house_url": "https://www.zillow.com/b/building/32.727867,-117.16179_ll/",
+      "price": "$3,100+",
+      "bedroom_s_": "1",
+      "bathroom_s_": "1",
+      "square_feet": "850",
+      "status": "Asano on Ivy",
+      "address": "321 Ivy St, San Diego, CA",
+      "listing_by": "Asano Realty"
+    },
+    {
+      "keyword": "San Diego, La Regencia",
+      "image_url": "https://photos.zillowstatic.com/fp/c7f3fcd601b34002a85416a139bd0e94-p_e.jpg",
+      "house_url": "https://www.zillow.com/apartments/san-diego-ca/la-regencia/5XjLPr/",
+      "price": "$2,600+",
+      "bedroom_s_": "1",
+      "bathroom_s_": "1",
+      "square_feet": "750",
+      "status": "La Regencia",
+      "address": "7681 Palmilla Dr, San Diego, CA",
+      "listing_by": "La Regencia Realty"
+    },
+    {
+      "keyword": "San Diego, Torrey Gardens",
+      "image_url": "https://photos.zillowstatic.com/fp/2ec5b8ec26d4377c5fd2002a273518cb-p_e.jpg",
+      "house_url": "https://www.zillow.com/apartments/san-diego-ca/torrey-gardens/635Rsb/",
+      "price": "$2,975+",
+      "bedroom_s_": "1",
+      "bathroom_s_": "1",
+      "square_feet": "900",
+      "status": "Torrey Gardens",
+      "address": "10615 Calle Mar De Mariposa, San Diego, CA",
+      "listing_by": "Torrey Gardens Realty"
+    },
+    {
+      "keyword": "San Diego, La Jolla Crossroads Apartments",
+      "image_url": "https://photos.zillowstatic.com/fp/dd76745888cec50b17de69f08b71c585-p_e.jpg",
+      "house_url": "https://www.zillow.com/apartments/san-diego-ca/la-jolla-crossroads-apartments/5XkGhy/",
+      "price": "$2,550+",
+      "bedroom_s_": "0",
+      "bathroom_s_": "1",
+      "square_feet": "650",
+      "status": "La Jolla Crossroads Apartments",
+      "address": "9085 Judicial Dr, San Diego, CA",
+      "listing_by": "La Jolla Crossroads Realty"
+    },
+    {
+      "keyword": "San Diego, Kansas 8",
+      "image_url": "https://photos.zillowstatic.com/fp/53fcd665bb238b51241e8a188337f8c0-p_e.jpg",
+      "house_url": "https://www.zillow.com/apartments/san-diego-ca/kansas-8/5dsTyd/",
+      "price": "$2,450+/mo",
+      "bedroom_s_": "2",
+      "bathroom_s_": "1",
+      "square_feet": "950",
+      "status": "Apartment for rent",
+      "address": "Kansas 8, 4542 Kansas St, San Diego, CA 92116",
+      "listing_by": "Kansas 8 Realty"
+    },
+    {
+      "keyword": "San Diego, Current",
+      "image_url": "https://photos.zillowstatic.com/fp/ff134a6d9c0745b0b0e07a135ce8f6c7-p_e.jpg",
+      "house_url": "https://www.zillow.com/apartments/san-diego-ca/current/5XjQ8P/",
+      "price": "$2,984+",
+      "bedroom_s_": "1",
+      "bathroom_s_": "1",
+      "square_feet": "825",
+      "status": "Current",
+      "address": "3060 Sixth Ave, San Diego, CA",
+      "listing_by": "Current Realty"
+    }
+  ]
+  

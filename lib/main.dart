@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:someonetoview/pages/home_page.dart';
 import 'firebase_options.dart';
 import 'package:someonetoview/models/furniture_listing.dart';
 import 'package:someonetoview/models/property_listing.dart';
@@ -107,7 +108,7 @@ class App extends StatelessWidget {
             );
           default:
             return MaterialPageRoute(
-              builder: (context) => const PropertyPage(),
+              builder: (context) => HomePage(),
             );
         }
       },

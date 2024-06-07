@@ -1,20 +1,13 @@
+// lib/widgets/property_listing_widget.dart
 import 'package:flutter/material.dart';
-import 'package:someonetoview/constants.dart';
+import 'package:intl/intl.dart';
 import 'package:someonetoview/models/property_listing.dart';
-import 'package:someonetoview/firestore_service.dart';
-import 'package:intl/intl.dart'; 
+import 'package:someonetoview/constants.dart';
 
 class PropertyListingWidget extends StatelessWidget {
   final PropertyListing propertyListing;
 
   const PropertyListingWidget({super.key, required this.propertyListing});
-
-  void _deleteListing(BuildContext context) async {
-    final firestoreService = FirestoreService();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Listing deleted')),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

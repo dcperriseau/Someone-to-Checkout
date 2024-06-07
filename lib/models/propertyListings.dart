@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:someonetoview/models/available_times.dart';
 import 'package:someonetoview/models/location.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
 class PropertyListing {
   final String id;
@@ -107,10 +106,4 @@ class PropertyListing {
     'image_urls': List<dynamic>.from(imageUrls.map((x) => x)),
     'available_times': availableTimes?.toMap(),
   };
-
-  static Future<List<PropertyListing>> loadPropertyListings() async {
-    final jsonString = await rootBundle.loadString('assets/property_listings.json');
-    final List<dynamic> jsonData = json.decode(jsonString);
-    return jsonData.map((item) => PropertyListing.fromMap(item)).toList();
-  }
 }
