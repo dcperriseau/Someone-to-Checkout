@@ -31,5 +31,16 @@
         "npm --prefix \"$RESOURCE_DIR\" run lint"
       ]
     }
+  ],
+  "headers": [
+    {
+      "source": "**",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "max-age=10"
+        }
+      ]
+    }
   ]
 }
